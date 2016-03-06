@@ -23,7 +23,7 @@ public class CategoryList extends AppCompatActivity
     private RecyclerView.Adapter listAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-
+    //TESTTESTTEST FOR GIT
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
