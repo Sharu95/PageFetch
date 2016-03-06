@@ -1,5 +1,6 @@
 package me.kulam.pagefetch;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,12 +27,14 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         public ViewHolder(View v)
         {
             super(v);
+
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(),"lol",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), "THIS IS THE METHOD", Toast.LENGTH_SHORT).show();
                 }
             });
+
             mTextView = (TextView) v.findViewById(R.id.list_item);
         }
     }
@@ -67,4 +70,5 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     public int getItemCount() {
         return categories.size();
     }
+
 }
