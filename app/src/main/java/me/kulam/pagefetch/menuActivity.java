@@ -1,35 +1,24 @@
 package me.kulam.pagefetch;
 
-import android.app.ListActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
-import android.widget.GridLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
-
-/*Could've extended with ListActivity*/
-public class CategoryList extends AppCompatActivity
+public class menuActivity extends AppCompatActivity
 {
     private RecyclerView listView;
-    private RecyclerView.Adapter listAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.Adapter menuAdapter;
 
-    //REMOVED TEST COMMENT FOR GIT TESTING
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_categorylist);
+        setContentView(R.layout.activity_recyclerlist);
 
         listView = (RecyclerView) findViewById(R.id.list_view);
 
@@ -62,9 +51,9 @@ public class CategoryList extends AppCompatActivity
 
         listView.setHasFixedSize(true);
 
-        listAdapter = new CategoryListAdapter(categories);
+        menuAdapter = new menuAdapter(categories);
 
-        listView.setAdapter(listAdapter);
+        listView.setAdapter(menuAdapter);
     }
 
     @Override

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".cardActivity">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_margin="5dp"
+        android:background="@color/colorPrimary"
+        android:id="@+id/card_view"
+        card_view:cardElevation="7dp"
+        card_view:cardCornerRadius="7dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="Title"
+                android:id="@+id/card_title"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="false"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="5dp" />
+
+            <RelativeLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/card_title"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/card_img_holder"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp">
+
+                <ImageView
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:id="@+id/card_img"
+                    android:layout_gravity="center"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/card_img_fashion"/>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="35dp"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@+id/card_desc"
+                android:layout_alignEnd="@+id/card_title"
+                android:layout_alignTop="@+id/card_desc"
+                android:id="@+id/card_open_page_holder">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/card_open_page"
+                    android:layout_marginRight="5dp"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/next_page" />
+
+            </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:id="@+id/card_desc"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_alignBottom="@+id/card_img_holder"
+                android:layout_alignTop="@+id/card_img_holder"
+                android:layout_toLeftOf="@id/card_open_page_holder"
+                android:layout_toRightOf="@id/card_img_holder"/>
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+
+</RelativeLayout>
