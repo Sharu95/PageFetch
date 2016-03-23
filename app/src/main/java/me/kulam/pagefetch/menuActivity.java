@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class menuActivity extends AppCompatActivity
@@ -13,6 +14,7 @@ public class menuActivity extends AppCompatActivity
     private RecyclerView.Adapter menuAdapter;
 
     private RecyclerView.LayoutManager mLayoutManager;
+    private ArrayList<String> categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -22,29 +24,10 @@ public class menuActivity extends AppCompatActivity
 
         listView = (RecyclerView) findViewById(R.id.list_view);
 
-        ArrayList<String> categories = new ArrayList<>();
+        categories = new ArrayList<>();
 
         //TODO: Load from Local storage
         //TODO: Add a loader while scrolling
-
-        /*Test data*/
-        categories.add("School");
-        categories.add("Fashion");
-        categories.add("News");
-        categories.add("Tech");
-        categories.add("School");
-        categories.add("Fashion");
-        categories.add("News");
-        categories.add("Tech");
-        categories.add("School");
-        categories.add("Fashion");
-        categories.add("News");
-        categories.add("Tech");
-        categories.add("School");
-        categories.add("Fashion");
-        categories.add("News");
-        categories.add("Tech");
-
 
         mLayoutManager = new LinearLayoutManager(this);
         listView.setLayoutManager(mLayoutManager);
