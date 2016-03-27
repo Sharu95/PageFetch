@@ -2,11 +2,12 @@ package me.kulam.pagefetch;
 
 import android.media.Image;
 
+import java.io.Serializable;
+
 /**
  * Created by Sharu on 14/03/2016.
  */
-public class Page
-{
+public class Page{
     private String title;
     private String description;
     private Image image;
@@ -19,13 +20,15 @@ public class Page
         this.title = title;
         this.description = description;
         this.url = url;
+        this.category = category;
 
         //TODO: Set image resource when creating page.
     }
 
     /*Optional*/
-    public Page(String category, String url)
+    public Page(String title, String category, String url)
     {
+        this.title = title;
         this.category = category;
         this.url = url;
         //TODO: Set image resource when creating page.

@@ -1,19 +1,15 @@
 package me.kulam.pagefetch;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -21,7 +17,9 @@ import java.util.ArrayList;
  * Created by Sharu on 14/03/2016.
  */
 public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder> {
-    private static ArrayList<Page> categoryPages;
+    private ArrayList<Page> validPages;
+    private Context context;
+    private String pressedCategory;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         protected CardView cardView;
@@ -47,7 +45,7 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder> {
                 public void onClick(View v) {
 
                     Intent intent = new Intent(v.getContext(), WebActivity.class);
-                    intent.putExtra("url",pageUrl);
+                    intent.putExtra("url", pageUrl);
                     v.getContext().startActivity(intent);
 
                     //viewWebPage(v);//TODO: Start fragment here
@@ -57,29 +55,24 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder> {
             //TODO: Import for image view
         }
 
-        public void setUrl(String url){
+        public void setUrl(String url) {
             pageUrl = url;
         }
     }
 
-    public cardAdapter(ArrayList<Page> categories) {
-        categoryPages = categories;
-
-        //TODO: Description max size = 170 characters. FIX AGAIN
-        categoryPages.add(new Page("Facebook","This is a social page.","Social" ,"http://facebook.com"));
-        categoryPages.add(new Page("Amazon","This is a social page.","Online shopping" ,"http://amazon.com"));
-        categoryPages.add(new Page("Twitter","This is a social page.","Social" ,"http://twitter.com"));
-        categoryPages.add(new Page("VG","This is a social page.", "News","http://vg.no"));
-        categoryPages.add(new Page("Aftenposten","This is a social page.","News", "http://aftenposten.no"));
+    public cardAdapter(Context context, String pressedCategory, ArrayList<Page> validPages) {
+        this.validPages = validPages;
+        this.context = context;
+        this.pressedCategory = pressedCategory.toLowerCase();
     }
 
     // Create new views (invoked by the layout manager)
     @Override
     public cardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                      int viewType) {
-        // create a new view
+
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_activity, parent, false);
+                .inflate(R.layout.activity_cardview, parent,false);
         // set the view's size, margins, paddings and layout parameters
         ViewHolder vh = new ViewHolder(v);
         return vh;
@@ -90,16 +83,17 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-
-        holder.cardTitle.setText(categoryPages.get(position).getTitle());
-        holder.cardDesc.setText(categoryPages.get(position).getDescription());
-        holder.setUrl(categoryPages.get(position).getUrl());
+        Page page = validPages.get(position);
+        holder.cardTitle.setText(page.getTitle());
+        holder.cardDesc.setText(page.getDescription());
+        holder.setUrl(page.getUrl());
     }
+
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return categoryPages.size();
+        return validPages.size();
     }
 
 }

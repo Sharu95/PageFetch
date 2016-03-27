@@ -9,4 +9,10 @@
     <color name="list_item_background">#FF363636</color>
     <color name="list_item_background_text">#FFFFFF</color>
 
+    <!--Dialog frag color-->
+    <color name="dialogColor">#FF5722</color>
+    <color name="dialogText">#FFFFFF</color>
+    <color name="addButton">#FFEB3b</color>
+    <color name="underLine">#000000</color>
+
 </resources>

@@ -1,5 +1,6 @@
 package me.kulam.pagefetch;
 
+import android.bluetooth.le.AdvertiseData;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +20,8 @@ import java.util.ArrayList;
  */
 public class menuAdapter extends RecyclerView.Adapter<menuAdapter.MenuViewHolder>
 {
-    private final ArrayList<String> categories;
+    private static ArrayList<String> categories;
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -35,9 +37,14 @@ public class menuAdapter extends RecyclerView.Adapter<menuAdapter.MenuViewHolder
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), cardActivity.class);
-                    intent.putExtra("category",categoryName.getText());
-                    v.getContext().startActivity(intent);
+
+                    int cName = R.id.list_item;
+                    if(cName == categoryName.getId())
+                    {
+                        Intent intent = new Intent(v.getContext(), cardActivity.class);
+                        intent.putExtra("category",categoryName.getText().toString());
+                        v.getContext().startActivity(intent);
+                    }
                 }
             });
         }
@@ -46,24 +53,6 @@ public class menuAdapter extends RecyclerView.Adapter<menuAdapter.MenuViewHolder
     // Provide a suitable constructor (depends on the kind of dataset)
     public menuAdapter(ArrayList<String> categories){
         this.categories = categories;
-
-        /*Test data*/
-        categories.add("School");
-        categories.add("Fashion");
-        categories.add("News");
-        categories.add("Tech");
-        categories.add("School");
-        categories.add("Fashion");
-        categories.add("News");
-        categories.add("Tech");
-        categories.add("School");
-        categories.add("Fashion");
-        categories.add("News");
-        categories.add("Tech");
-        categories.add("School");
-        categories.add("Fashion");
-        categories.add("News");
-        categories.add("Tech");
     }
 
     // Create new views (invoked by the layout manager)
@@ -82,9 +71,19 @@ public class menuAdapter extends RecyclerView.Adapter<menuAdapter.MenuViewHolder
     public void onBindViewHolder(MenuViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+        String finite = "";
+        String category = categories.get(position);
+        finite = formatString(finite, category);
+        holder.categoryName.setText(finite);
+    }
 
-        holder.categoryName.setText(categories.get(position));
-        //TODO Find out about null issue
+    public String formatString(String finite,String category){
+        char firstChar = category.charAt(0);
+        firstChar = Character.toUpperCase(firstChar);
+        category = category.toLowerCase();
+        finite+=firstChar;
+        finite+=category.substring(1,category.length());
+        return finite;
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -92,5 +91,4 @@ public class menuAdapter extends RecyclerView.Adapter<menuAdapter.MenuViewHolder
     public int getItemCount() {
         return categories.size();
     }
-
 }
