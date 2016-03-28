@@ -112,7 +112,7 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
     }
 
     @Override
-    public int handleUserInput(String input) {
+    public int handleUserInput(String input, String inputCategory, String inputUrl, String inputDesc) {
         input = input.toLowerCase();
         input = input.trim();
 

@@ -2,24 +2,17 @@ package me.kulam.pagefetch;
 
 import android.app.DialogFragment;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
+import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,9 +26,13 @@ public class AddItemDialogFrag extends DialogFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     private EditText categoryInput;
+    private EditText pageTitle;
+    private EditText pageDesc;
+    private EditText pageCategory;
+    private EditText pageUrl;
+
     private String title;
 
     private OnFragmentInteractionListener mListener;
@@ -70,32 +67,79 @@ public class AddItemDialogFrag extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-            Button btn;
-            View view;
-            TextView addItemTitle;
+        Button btn;
+        View view;
+        TextView addItemTitle;
 
+        if(title.equalsIgnoreCase("New Category")){
             view = inflater.inflate(R.layout.add_item_frag, container);
             btn = (Button) view.findViewById(R.id.add_item_btn);
             categoryInput = (EditText) view.findViewById(R.id.add_item_input); //Global scope for onClick purpose
             addItemTitle = (TextView) view.findViewById(R.id.add_item_title);
 
-            addItemTitle.setText(title);
-            btn.setText("Add");
+        } else{
+            view = inflater.inflate(R.layout.add_page_frag, container);
+            btn = (Button) view.findViewById(R.id.add_page_btn);
+            addItemTitle = (TextView) view.findViewById(R.id.add_page_title);
 
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                int input = mListener.handleUserInput(categoryInput.getText().toString(),null,null,null); //Callback
+            pageTitle = (EditText) view.findViewById(R.id.add_page_input_title); //Global scope for onClick purpose;
+            pageCategory = (EditText) view.findViewById(R.id.add_page_input_category); //Global scope for onClick purpose;
+            pageUrl = (EditText) view.findViewById(R.id.add_page_input_url); //Global scope for onClick purpose;
+            pageDesc = (EditText) view.findViewById(R.id.add_page_input_desc); //Global scope for onClick purpose;
 
-                if (input == -1) {
-                    Toast.makeText(getDialog().getContext(), "Category already exists", Toast.LENGTH_SHORT).show();
-                } else if (input == 0) {
-                    Toast.makeText(getDialog().getContext(), "Field is empty", Toast.LENGTH_SHORT).show();
-                } else {
-                    getDialog().dismiss();
+
+        }
+
+        addItemTitle.setText(title); //Move out later
+        btn.setText("Add"); //Move out later
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //int input = categoryInput.getId();
+                if(title.equalsIgnoreCase("New Category")){
+                    int checkCategoryInput = mListener.handleUserInput(categoryInput.getText().toString(),null,null,null); //Callback
+                    if (checkCategoryInput == -1){
+                        Toast.makeText(getDialog().getContext(), "Category already exists", Toast.LENGTH_SHORT).show();
+                    } else if (checkCategoryInput == 0){
+                        Toast.makeText(getDialog().getContext(), "Field is empty", Toast.LENGTH_SHORT).show();
+                    } else{
+                        getDialog().dismiss();
+                    }
+                }else{
+
+                    String inputTitle =      pageTitle.getText().toString();
+                    String inputCategory =   pageCategory.getText().toString();
+                    String inputUrl =        pageUrl.getText().toString();
+                    String inputDesc =       pageDesc.getText().toString();
+
+                    String validUrlHTTP = "http://www."+inputUrl.toLowerCase().trim();
+                    String validUrlHTTPS = "https://www."+inputUrl.toLowerCase().trim();
+
+                    //TODO: Get image
+                    //TODO: Check edit text input wrong input
+                    if(inputTitle.length() == 0 || inputCategory.length() == 0  || inputUrl.length() == 0 ){
+                        Toast.makeText(getDialog().getContext(),"Some fields are empty", Toast.LENGTH_SHORT).show();
+                    }else{
+                        if(URLUtil.isValidUrl(validUrlHTTP)){
+                            mListener.handleUserInput(inputTitle,inputCategory,validUrlHTTP,inputDesc); //Callback
+                            getDialog().dismiss();
+                            //Toast.makeText(getDialog().getContext(),"Valid HTTP", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(URLUtil.isValidUrl(validUrlHTTPS)){
+                            mListener.handleUserInput(inputTitle,inputCategory,validUrlHTTPS,inputDesc); //Callback
+                            getDialog().dismiss();
+                            //Toast.makeText(getDialog().getContext(),"Valid HTTPS", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(getDialog().getContext(),"Web page/URL is invalid", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
                 }
-                }
-            });
+
+            }
+        });
 
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         getDialog().getWindow().setWindowAnimations(R.style.searchDialogSlide);

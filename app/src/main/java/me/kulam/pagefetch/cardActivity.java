@@ -47,15 +47,15 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
         listView.setLayoutManager(layoutManager);
         listView.setHasFixedSize(true);
 
-        categoryPages.add(new Page("Facebook","This is a social page.","Social" ,"http://facebook.com"));
-        categoryPages.add(new Page("Twitter","This is a social page.","Social" ,"http://twitter.com"));
+        //TODO: SWIPE
 
-        categoryPages.add(new Page("Amazon","This is a OS page.","Online shopping" ,"http://amazon.com"));
+        categoryPages.add(new Page("Facebook","Social","http://facebook.com","This is a social page."));
+        categoryPages.add(new Page("Facebook","Social","http://twitter.com","This is a social page."));
 
-        categoryPages.add(new Page("VG", "This is a News page.", "News", "http://vg.no"));
-        categoryPages.add(new Page("Aftenposten", "This is a News page.", "News", "http://aftenposten.no"));
-        categoryPages.add(new Page("DB", "This is a News page.", "News", "http://dagbladet.no"));
-        categoryPages.add(new Page("Nettavisen", "This is a News page.", "News", "http://nettavisen.no"));
+        categoryPages.add(new Page("VG","News", "http://vg.no","This is a News page."));
+        categoryPages.add(new Page("Aftenposten","News", "http://aftenposten.no","This is a News page."));
+        categoryPages.add(new Page("DB","News", "http://dagbladet.no","This is a News page."));
+        categoryPages.add(new Page("NA","News", "http://nettavisen.no","This is a News page."));
 
         for(Page page : categoryPages){
             if (page.getCategory().trim().equalsIgnoreCase(category)){

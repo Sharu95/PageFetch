@@ -37,7 +37,6 @@ public class SwipeCards extends ItemTouchHelper.Callback{
         }
 
     }
-
     public interface ItemCardSwipe {
         void removeCard(int position);
     }
