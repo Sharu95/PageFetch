@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:id="@+id/add_page_frag">
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="450dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:elevation="13dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="TITLE"
+            android:id="@+id/add_page_title"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:background="@color/dialogColor"
+            android:textColor="@color/dialogText"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:fontFamily="Roboto"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:text="Add"
+            android:id="@+id/add_page_btn"
+            android:layout_marginBottom="20dp"
+            android:background="@color/addButton"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+        <RelativeLayout
+            android:layout_width="220dp"
+            android:layout_height="270dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="5dp"
+            android:id="@+id/relativeLayout">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/add_page_input_title"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:hint="Page title..."/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/add_page_input_category"
+                android:layout_below="@+id/add_page_input_title"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:hint="Page category..."/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/add_page_input_url"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/add_page_input_category"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:hint="Page url..."/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/add_page_input_desc"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/add_page_input_url"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:hint="Optional description..." />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignTop="@+id/relativeLayout"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/relativeLayout"
+            android:layout_alignBottom="@+id/relativeLayout"
+            android:layout_marginLeft="5dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/add_page_img_title"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/add_page_title" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/add_page_category"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/add_page_img_title"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/add_page_category" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/add_page_img_url"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/add_page_category"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/add_page_url" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/add_page_desc"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_below="@+id/add_page_img_url"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/add_page_desc" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>

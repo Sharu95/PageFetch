@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +22,12 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder> {
     private ArrayList<Page> validPages;
     private Context context;
     private String pressedCategory;
+
+
+    public void removeCard(int position){
+        validPages.remove(position);
+        notifyItemRemoved(position);
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         protected CardView cardView;
@@ -46,6 +54,7 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder> {
 
                     Intent intent = new Intent(v.getContext(), WebActivity.class);
                     intent.putExtra("url", pageUrl);
+                    System.out.println(pageUrl);
                     v.getContext().startActivity(intent);
 
                     //viewWebPage(v);//TODO: Start fragment here
@@ -75,6 +84,12 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder> {
                 .inflate(R.layout.activity_cardview, parent,false);
         // set the view's size, margins, paddings and layout parameters
         ViewHolder vh = new ViewHolder(v);
+
+        //TODO: Remove Animation class, remove AnimationUtils
+        //TODO: FInd out about animation in viewholder
+        //if(flag == false) {
+            Animation animation = AnimationUtils.loadAnimation(this.context, R.anim.slide_in);
+            v.startAnimation(animation);//}
         return vh;
     }
 

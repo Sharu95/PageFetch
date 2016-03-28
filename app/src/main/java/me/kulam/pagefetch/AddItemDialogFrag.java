@@ -85,7 +85,7 @@ public class AddItemDialogFrag extends DialogFragment {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                int input = mListener.handleUserInput(categoryInput.getText().toString()); //Callback
+                int input = mListener.handleUserInput(categoryInput.getText().toString(),null,null,null); //Callback
 
                 if (input == -1) {
                     Toast.makeText(getDialog().getContext(), "Category already exists", Toast.LENGTH_SHORT).show();
@@ -137,6 +137,6 @@ public class AddItemDialogFrag extends DialogFragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        int handleUserInput(String input);
+        int handleUserInput(String inputTitle, String inputCategory, String inputUrl, String inputDesc);
     }
 }

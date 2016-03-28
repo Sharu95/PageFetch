@@ -15,7 +15,7 @@ public class Page{
     private String category;
 
     /*Intentional*/
-    public Page(String title, String description, String category, String url)
+    public Page(String title, String category, String url,String description)
     {
         this.title = title;
         this.description = description;
