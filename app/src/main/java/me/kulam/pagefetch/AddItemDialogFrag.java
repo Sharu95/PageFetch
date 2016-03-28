@@ -14,14 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link AddItemDialogFrag.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link AddItemDialogFrag#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AddItemDialogFrag extends DialogFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

@@ -7,9 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,11 +15,10 @@ import java.util.ArrayList;
 /**
  * Created by Sharu on 14/03/2016.
  */
-public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder> {
+public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder>{
     private ArrayList<Page> validPages;
     private Context context;
     private String pressedCategory;
-
 
     public void removeCard(int position){
         validPages.remove(position);
@@ -83,14 +79,7 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder> {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.activity_cardview, parent,false);
         // set the view's size, margins, paddings and layout parameters
-        ViewHolder vh = new ViewHolder(v);
-
-        //TODO: Remove Animation class, remove AnimationUtils
-        //TODO: FInd out about animation in viewholder
-        //if(flag == false) {
-            Animation animation = AnimationUtils.loadAnimation(this.context, R.anim.slide_in);
-            v.startAnimation(animation);//}
-        return vh;
+        return new ViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)

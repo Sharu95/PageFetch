@@ -20,7 +20,7 @@ public class SwipeCards extends ItemTouchHelper.Callback{
 
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        int swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT; //ItemTouchHelper.START | ItemTouchHelper.END;
+        int swipeFlags = ItemTouchHelper.LEFT; //ItemTouchHelper.START | ItemTouchHelper.END;
         return makeMovementFlags(0,swipeFlags);
     }
 
@@ -31,11 +31,7 @@ public class SwipeCards extends ItemTouchHelper.Callback{
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-
-        if(direction == ItemTouchHelper.LEFT){
-            ((cardAdapter) mAdapter).removeCard(direction);
-        }
-
+         ((cardAdapter) mAdapter).removeCard(viewHolder.getAdapterPosition());
     }
     public interface ItemCardSwipe {
         void removeCard(int position);

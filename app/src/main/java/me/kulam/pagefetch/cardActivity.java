@@ -2,11 +2,13 @@ package me.kulam.pagefetch;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ClipData;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -47,7 +49,9 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
         listView.setLayoutManager(layoutManager);
         listView.setHasFixedSize(true);
 
-        //TODO: SWIPE
+        ItemTouchHelper.Callback swipeCards = new SwipeCards(cardAdapter);
+        ItemTouchHelper helper = new ItemTouchHelper(swipeCards);
+        helper.attachToRecyclerView(listView);
 
         categoryPages.add(new Page("Facebook","Social","http://facebook.com","This is a social page."));
         categoryPages.add(new Page("Facebook","Social","http://twitter.com","This is a social page."));
@@ -65,7 +69,9 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
         }
         cardAdapter.notifyDataSetChanged();
 
-        /*Test data*/
+
+
+
         //TODO: Description max size = 170 characters. FIX AGAIN
 
         //cardAdapter = new RecyclerAdapter(this);
