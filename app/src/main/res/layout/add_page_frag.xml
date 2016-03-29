@@ -4,8 +4,8 @@
     android:id="@+id/add_page_frag">
 
     <RelativeLayout
-        android:layout_width="300dp"
-        android:layout_height="450dp"
+        android:layout_width="280dp"
+        android:layout_height="420dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:elevation="13dp">
@@ -27,14 +27,15 @@
             android:textStyle="bold"/>
 
         <Button
-            android:layout_width="120dp"
+            android:layout_width="100dp"
             android:layout_height="50dp"
             android:text="Add"
             android:id="@+id/add_page_btn"
-            android:layout_marginBottom="20dp"
             android:background="@color/addButton"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_below="@+id/relativeLayout"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp" />
 
         <RelativeLayout
             android:layout_width="220dp"
@@ -53,7 +54,9 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="10dp"
-                android:hint="Page title..."/>
+                android:hint="Title..."
+                android:fontFamily="Roboto"
+                android:textSize="17sp" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -64,7 +67,9 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:hint="Page category..."/>
+                android:hint="Category..."
+                android:fontFamily="Roboto"
+                android:textSize="17sp" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -75,7 +80,10 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:hint="Page url..."/>
+                android:hint="example.com"
+                android:inputType="textUri"
+                android:fontFamily="Roboto"
+                android:textSize="17sp" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -86,7 +94,9 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:hint="Optional description..." />
+                android:hint="Optional description..."
+                android:fontFamily="Roboto"
+                android:textSize="17sp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -96,7 +106,8 @@
             android:layout_alignParentStart="true"
             android:layout_toStartOf="@+id/relativeLayout"
             android:layout_alignBottom="@+id/relativeLayout"
-            android:layout_marginLeft="5dp">
+            android:layout_marginLeft="5dp"
+            android:id="@+id/relativeLayout2">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -143,5 +154,16 @@
                 android:src="@drawable/add_page_desc" />
 
         </RelativeLayout>
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="Cancel"
+            android:id="@+id/add_page_exitbtn"
+            android:background="@color/addButton"
+            android:layout_alignTop="@+id/add_page_btn"
+            android:layout_alignStart="@+id/relativeLayout2"
+            android:layout_marginLeft="20dp"
+            android:onClick="exitDialog"/>
     </RelativeLayout>
 </RelativeLayout>

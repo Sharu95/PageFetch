@@ -43,6 +43,7 @@ public class menuAdapter extends RecyclerView.Adapter<menuAdapter.MenuViewHolder
                     {
                         Intent intent = new Intent(v.getContext(), cardActivity.class);
                         intent.putExtra("category",categoryName.getText().toString());
+                        intent.putStringArrayListExtra("categories",categories);
                         v.getContext().startActivity(intent);
                     }
                 }

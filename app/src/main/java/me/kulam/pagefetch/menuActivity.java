@@ -92,7 +92,7 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
 
     public void addItem(){
         FragmentManager fm = getFragmentManager();
-        AddItemDialogFrag df = AddItemDialogFrag.newInstance("New Category");
+        AddItemDialogFrag df = AddItemDialogFrag.newInstance("New Category",null);
         df.show(fm, "add_item_frag");
     }
 

@@ -26,7 +26,8 @@
                 android:id="@+id/add_item_btn"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:background="@color/addButton"/>
+                android:background="@color/addButton"
+                android:text="ADD" />
 
             <TextView
                 android:layout_width="match_parent"

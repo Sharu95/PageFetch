@@ -22,9 +22,11 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
     private RecyclerView listView;
     private RecyclerView.Adapter cardAdapter;
     private RecyclerView.LayoutManager layoutManager;
-
+    private static final int MAX_DESC_LENGTH = 25;
     private static ArrayList<Page> categoryPages;
     private ArrayList<Page> validPages;
+
+    private ArrayList<String> categories;
 
     private String category;
 
@@ -40,6 +42,7 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             category = extras.getString("category");
+            categories = extras.getStringArrayList("categories");
         }
 
         cardAdapter = new cardAdapter(this,category,validPages);
@@ -49,11 +52,15 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
         listView.setLayoutManager(layoutManager);
         listView.setHasFixedSize(true);
 
+        //TODO: Give option to get back deleted card, timeout for restoration
         ItemTouchHelper.Callback swipeCards = new SwipeCards(cardAdapter);
         ItemTouchHelper helper = new ItemTouchHelper(swipeCards);
         helper.attachToRecyclerView(listView);
 
-        categoryPages.add(new Page("Facebook","Social","http://facebook.com","This is a social page."));
+
+
+        //TODO: Description max size = 150 characters
+        categoryPages.add(new Page("Facebook","Social","http://facebook.com","It was popularised"));
         categoryPages.add(new Page("Facebook","Social","http://twitter.com","This is a social page."));
 
         categoryPages.add(new Page("VG","News", "http://vg.no","This is a News page."));
@@ -72,7 +79,6 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
 
 
 
-        //TODO: Description max size = 170 characters. FIX AGAIN
 
         //cardAdapter = new RecyclerAdapter(this);
 
@@ -107,7 +113,7 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
 
     public void addItem(){
         FragmentManager fm = getFragmentManager();
-        AddItemDialogFrag df = AddItemDialogFrag.newInstance("New Page");
+        AddItemDialogFrag df = AddItemDialogFrag.newInstance("New Page",categories);
         df.show(fm, "add_page_frag");
 
         //TODO: Add item, remember multiple constructors
@@ -116,6 +122,13 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
         //TODO:
     }
 
+    public void exitDialog(View v){
+        AddItemDialogFrag runningFragment = (AddItemDialogFrag)getFragmentManager().findFragmentByTag("add_page_frag");
+
+        if(v.getId() == R.id.add_page_exitbtn && runningFragment.isVisible()){
+            runningFragment.dismiss();
+        }
+    }
     public static ArrayList<Page> getCategoryPages(){
         return categoryPages;
     }
@@ -126,12 +139,16 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
         Page page;
         if(inputDesc == null || inputDesc.length() == 0){
             page = new Page(inputTitle,inputCategory,inputUrl);
-        }else{
+        }else{ //Possibly redundant, but for the sake of controlled environment
             page = new Page(inputTitle,inputCategory,inputUrl,inputDesc);
         }
         validPages.add(page);
         cardAdapter.notifyDataSetChanged();
         Toast.makeText(this,"Page added",Toast.LENGTH_SHORT).show();
         return 1;
+    }
+
+    public int getMaxDescSize(){
+        return MAX_DESC_LENGTH;
     }
 }

@@ -2,6 +2,8 @@ package me.kulam.pagefetch;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
+import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +12,22 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+//picasso and jsoup
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attribute;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 /**
@@ -42,15 +60,12 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder>{
             open_page = (ImageView) v.findViewById(R.id.card_open_page);
             pageUrl = "";
 
-            cardImg.setImageResource(R.drawable.card_img_fashion);
-
             open_page.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     Intent intent = new Intent(v.getContext(), WebActivity.class);
                     intent.putExtra("url", pageUrl);
-                    System.out.println(pageUrl);
                     v.getContext().startActivity(intent);
 
                     //viewWebPage(v);//TODO: Start fragment here
@@ -91,6 +106,22 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder>{
         holder.cardTitle.setText(page.getTitle());
         holder.cardDesc.setText(page.getDescription());
         holder.setUrl(page.getUrl());
+
+        String pageUrl = holder.pageUrl;
+        String testURL = "http://www.";
+
+        //new RunTask().execute(testURL);
+
+        /*
+        //TODO: Picasso. Resize to cardImg first also
+        Picasso.with(context).load(testURL).resize(75, 75).centerCrop().into(holder.cardImg);
+        Picasso.with(context).load
+        */
+
+
+        //holder.cardImg.setImageResource(R.drawable.card_img_fashion);
+
+
     }
 
 
@@ -100,4 +131,57 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder>{
         return validPages.size();
     }
 
+    private class RunTask extends AsyncTask<String,Void,String>{
+
+        @Override
+        protected String doInBackground(String... urls) {
+            Document doc = null;
+            Elements pageLogo = null;
+            Element getElement = null;
+            String absoluteUrl;
+            String srcValue;
+            String checkID;
+            String checkClass;
+
+
+
+            /*
+             //TODO: FIX this FIX FUCKING ISSUE FIX
+            try{
+                doc = Jsoup.connect(urls[0]).get();
+                for(int i = 0; i < 50; i++){
+                    getElement = doc.select("img").get(i); //Image element i
+                    System.out.println("Total <IMG>: " + getElement.toString()); //img tag nr i
+
+                    absoluteUrl = getElement.absUrl("src"); //Get src url of img element
+                    System.out.println("Abs url: " + absoluteUrl); //Print out absolute src url
+
+                    checkID = getElement.id(); //TODO: Check how to get an <IMG>-tag id
+                    System.out.println("ID: " + checkID);
+
+                    checkClass = getElement.className(); //Gets a <IMG>-tag classname.
+                    System.out.println("Class name: " + checkClass);
+
+
+                    switch(checkID){
+                        case "LogoImage": System.out.println("LogoImage");
+                        case "logo-image": System.out.println("logo-image");
+                        case "logoImage": System.out.println("logoImage");
+                    }
+                }
+                //srcValue = getPic.attr("LogoImage");
+                //System.out.println("SrcValue: " + srcValue);// exact content value of the attribute
+
+                throw new IOException();
+            }catch(IOException e){
+                    e.getMessage();
+            }*/
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String aVoid) {
+            super.onPostExecute(aVoid);
+        }
+    }
 }

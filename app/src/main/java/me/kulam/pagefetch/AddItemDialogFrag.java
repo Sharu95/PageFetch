@@ -9,21 +9,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.webkit.URLUtil;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class AddItemDialogFrag extends DialogFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    private ArrayList<String> validCategories;
 
     private EditText categoryInput;
     private EditText pageTitle;
     private EditText pageDesc;
     private EditText pageCategory;
     private EditText pageUrl;
+
+    private AutoCompleteTextView autoFillCategory;
 
     private String title;
 
@@ -40,10 +49,11 @@ public class AddItemDialogFrag extends DialogFragment {
      * @return A new instance of fragment AddItemDialogFrag.
      */
     // TODO: Rename and change types and number of parameters
-    public static AddItemDialogFrag newInstance(String title) {
+    public static AddItemDialogFrag newInstance(String title, ArrayList<String> allCategories) {
         AddItemDialogFrag fragment = new AddItemDialogFrag();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, title);
+        args.putStringArrayList(ARG_PARAM2, allCategories);
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,6 +63,7 @@ public class AddItemDialogFrag extends DialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             title = getArguments().getString(ARG_PARAM1);
+            validCategories = getArguments().getStringArrayList(ARG_PARAM2);
         }
     }
 
@@ -75,61 +86,62 @@ public class AddItemDialogFrag extends DialogFragment {
             addItemTitle = (TextView) view.findViewById(R.id.add_page_title);
 
             pageTitle = (EditText) view.findViewById(R.id.add_page_input_title); //Global scope for onClick purpose;
+
+
             pageCategory = (EditText) view.findViewById(R.id.add_page_input_category); //Global scope for onClick purpose;
+            //TODO: TEST AUTOCOMPLETE
+            //autoFillCategory = (AutoCompleteTextView) view.findViewById(R.id.add_page_input_category);
+            //ArrayAdapter<String> tmpAdapter = new ArrayAdapter<>(getDialog().getContext(),R.layout.add_page_frag,validCategories);
+            //autoFillCategory.setAdapter(tmpAdapter);
+            //autoFillCategory.setThreshold(1);
+
             pageUrl = (EditText) view.findViewById(R.id.add_page_input_url); //Global scope for onClick purpose;
             pageDesc = (EditText) view.findViewById(R.id.add_page_input_desc); //Global scope for onClick purpose;
-
-
         }
-
         addItemTitle.setText(title); //Move out later
-        btn.setText("Add"); //Move out later
 
+        //TODO: How to set one listener on multiple buttons
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //int input = categoryInput.getId();
-                if(title.equalsIgnoreCase("New Category")){
-                    int checkCategoryInput = mListener.handleUserInput(categoryInput.getText().toString(),null,null,null); //Callback
-                    if (checkCategoryInput == -1){
+                if (title.equalsIgnoreCase("New Category")) {
+                    int checkCategoryInput = mListener.handleUserInput(categoryInput.getText().toString(), null, null, null); //Callback
+                    if (checkCategoryInput == -1) {
                         Toast.makeText(getDialog().getContext(), "Category already exists", Toast.LENGTH_SHORT).show();
-                    } else if (checkCategoryInput == 0){
+                    } else if (checkCategoryInput == 0) {
                         Toast.makeText(getDialog().getContext(), "Field is empty", Toast.LENGTH_SHORT).show();
-                    } else{
+                    } else {
                         getDialog().dismiss();
                     }
-                }else{
+                } else {
+                    String inputTitle = pageTitle.getText().toString();
+                    String inputCategory = pageCategory.getText().toString();
+                    String inputUrl = pageUrl.getText().toString();
+                    String inputDesc = pageDesc.getText().toString();
 
-                    String inputTitle =      pageTitle.getText().toString();
-                    String inputCategory =   pageCategory.getText().toString();
-                    String inputUrl =        pageUrl.getText().toString();
-                    String inputDesc =       pageDesc.getText().toString();
-
-                    String validUrlHTTP = "http://www."+inputUrl.toLowerCase().trim();
-                    String validUrlHTTPS = "https://www."+inputUrl.toLowerCase().trim();
+                    String validUrlHTTP = "http://www." + inputUrl.toLowerCase().trim();
+                    //String validUrlHTTPS = "https://www."+inputUrl.toLowerCase().trim();
 
                     //TODO: Get image
                     //TODO: Check edit text input wrong input
-                    if(inputTitle.length() == 0 || inputCategory.length() == 0  || inputUrl.length() == 0 ){
-                        Toast.makeText(getDialog().getContext(),"Some fields are empty", Toast.LENGTH_SHORT).show();
-                    }else{
-                        if(URLUtil.isValidUrl(validUrlHTTP)){
-                            mListener.handleUserInput(inputTitle,inputCategory,validUrlHTTP,inputDesc); //Callback
-                            getDialog().dismiss();
+                    if (inputTitle.length() == 0 || inputCategory.length() == 0 || inputUrl.length() == 0) {
+                        Toast.makeText(getDialog().getContext(), "Some fields are empty", Toast.LENGTH_SHORT).show();
+                    } else {
+                        int MAX_DESC_LENGTH = ((cardActivity) getActivity()).getMaxDescSize();
+                        if (URLUtil.isValidUrl(validUrlHTTP)) {
+                            if (inputDesc.length() > MAX_DESC_LENGTH) {
+                                Toast.makeText(getDialog().getContext(), "Description too long", Toast.LENGTH_SHORT).show();
+                            } else {
+                                mListener.handleUserInput(inputTitle, inputCategory, validUrlHTTP, inputDesc); //Callback
+                                getDialog().dismiss();
+                            }
                             //Toast.makeText(getDialog().getContext(),"Valid HTTP", Toast.LENGTH_SHORT).show();
-                        }
-                        else if(URLUtil.isValidUrl(validUrlHTTPS)){
-                            mListener.handleUserInput(inputTitle,inputCategory,validUrlHTTPS,inputDesc); //Callback
-                            getDialog().dismiss();
-                            //Toast.makeText(getDialog().getContext(),"Valid HTTPS", Toast.LENGTH_SHORT).show();
-                        }
-                        else{
-                            Toast.makeText(getDialog().getContext(),"Web page/URL is invalid", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getDialog().getContext(), "Web page/URL is invalid", Toast.LENGTH_SHORT).show();
                         }
                     }
-
                 }
-
             }
         });
 
