@@ -4,6 +4,8 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
+import android.text.method.TextKeyListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +15,12 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AddItemDialogFrag extends DialogFragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -24,8 +28,7 @@ public class AddItemDialogFrag extends DialogFragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private ArrayList<String> validCategories;
-
+    private static ArrayList<String> validCategories;
     private EditText categoryInput;
     private EditText pageTitle;
     private EditText pageDesc;
@@ -49,11 +52,11 @@ public class AddItemDialogFrag extends DialogFragment {
      * @return A new instance of fragment AddItemDialogFrag.
      */
     // TODO: Rename and change types and number of parameters
-    public static AddItemDialogFrag newInstance(String title, ArrayList<String> allCategories) {
+    public static AddItemDialogFrag newInstance(String title, ArrayList<String> validCategories) {
         AddItemDialogFrag fragment = new AddItemDialogFrag();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, title);
-        args.putStringArrayList(ARG_PARAM2, allCategories);
+        args.putStringArrayList("categories",validCategories);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,7 +66,7 @@ public class AddItemDialogFrag extends DialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             title = getArguments().getString(ARG_PARAM1);
-            validCategories = getArguments().getStringArrayList(ARG_PARAM2);
+            validCategories = getArguments().getStringArrayList("categories");
         }
     }
 
@@ -86,17 +89,34 @@ public class AddItemDialogFrag extends DialogFragment {
             addItemTitle = (TextView) view.findViewById(R.id.add_page_title);
 
             pageTitle = (EditText) view.findViewById(R.id.add_page_input_title); //Global scope for onClick purpose;
+            pageTitle.requestFocus(View.FOCUS_DOWN);
 
+            //pageCategory = (EditText) view.findViewById(R.id.add_page_input_category); //Global scope for onClick purpose;
+            //pageCategory.requestFocus(View.FOCUS_DOWN);
 
-            pageCategory = (EditText) view.findViewById(R.id.add_page_input_category); //Global scope for onClick purpose;
-            //TODO: TEST AUTOCOMPLETE
-            //autoFillCategory = (AutoCompleteTextView) view.findViewById(R.id.add_page_input_category);
-            //ArrayAdapter<String> tmpAdapter = new ArrayAdapter<>(getDialog().getContext(),R.layout.add_page_frag,validCategories);
-            //autoFillCategory.setAdapter(tmpAdapter);
-            //autoFillCategory.setThreshold(1);
+            //TODO: CHECK IF VALID CATEGORY
+
+            String[] cat = new String[validCategories.size()];
+            for(int i = 0; i < cat.length; i++){
+                String s = validCategories.get(i);
+                String finite = "";
+                char first = s.charAt(0);
+                first = Character.toUpperCase(first);
+                finite += first;
+                finite += s.substring(1,s.length());
+                cat[i] = finite;
+            }
+            autoFillCategory = (AutoCompleteTextView) view.findViewById(R.id.add_page_input_category);
+            ArrayAdapter<String> tmpAdapter = new ArrayAdapter<>(getDialog().getContext(),android.R.layout.simple_list_item_1,cat);
+            autoFillCategory.setAdapter(tmpAdapter);
+            autoFillCategory.setThreshold(1);
 
             pageUrl = (EditText) view.findViewById(R.id.add_page_input_url); //Global scope for onClick purpose;
+            pageUrl.requestFocus(View.FOCUS_DOWN);
+
             pageDesc = (EditText) view.findViewById(R.id.add_page_input_desc); //Global scope for onClick purpose;
+            pageDesc.requestFocus(View.FOCUS_DOWN);
+
         }
         addItemTitle.setText(title); //Move out later
 

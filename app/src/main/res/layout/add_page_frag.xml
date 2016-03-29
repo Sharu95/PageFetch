@@ -56,9 +56,11 @@
                 android:layout_marginTop="10dp"
                 android:hint="Title..."
                 android:fontFamily="Roboto"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:nextFocusDown="@+id/add_page_input_category"
+                android:singleLine="true"/>
 
-            <EditText
+            <AutoCompleteTextView
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:id="@+id/add_page_input_category"
@@ -69,7 +71,9 @@
                 android:layout_marginRight="5dp"
                 android:hint="Category..."
                 android:fontFamily="Roboto"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:nextFocusDown="@+id/add_page_input_url"
+                android:singleLine="true" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -83,7 +87,9 @@
                 android:hint="example.com"
                 android:inputType="textUri"
                 android:fontFamily="Roboto"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:nextFocusDown="@+id/add_page_input_desc"
+                android:singleLine="true"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -96,7 +102,8 @@
                 android:layout_marginRight="5dp"
                 android:hint="Optional description..."
                 android:fontFamily="Roboto"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:singleLine="true"/>
         </RelativeLayout>
 
         <RelativeLayout

@@ -42,7 +42,7 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             category = extras.getString("category");
-            categories = extras.getStringArrayList("categories");
+            categories = extras.getStringArrayList("categories");//TODO: Redundant
         }
 
         cardAdapter = new cardAdapter(this,category,validPages);
