@@ -1,6 +1,7 @@
 package me.kulam.pagefetch;
 
 import android.content.ClipData;
+import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
@@ -32,7 +33,24 @@ public class SwipeCards extends ItemTouchHelper.Callback{
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
          ((cardAdapter) mAdapter).removeCard(viewHolder.getAdapterPosition());
+
     }
+
+    @Override
+    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+            if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                float width = (float) viewHolder.itemView.getWidth();
+                float alpha = 1.0f - Math.abs(dX) / width;
+                viewHolder.itemView.setAlpha(alpha);
+                viewHolder.itemView.setTranslationX(dX);
+            } else {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY,
+                        actionState, isCurrentlyActive);
+            }
+    }
+
+    /*If callback is needed*/
     public interface ItemCardSwipe {
         void removeCard(int position);
     }

@@ -28,7 +28,7 @@ public class Page{
     /*Optional*/
     public Page(String title, String category, String url)
     {
-        this.title = title;
+        this.title = StringUsage.stdFormat(title);
         this.category = category;
         this.url = url;
         //TODO: Set image resource when creating page.

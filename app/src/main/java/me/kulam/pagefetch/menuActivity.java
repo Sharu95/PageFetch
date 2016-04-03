@@ -1,11 +1,14 @@
 package me.kulam.pagefetch;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +26,8 @@ import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class menuActivity extends AppCompatActivity implements AddItemDialogFrag.OnFragmentInteractionListener
 {
@@ -31,6 +36,11 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
 
     private RecyclerView.LayoutManager mLayoutManager;
     private static ArrayList<String> categories;
+    private static Set<String> categoriesSet;
+
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -49,15 +59,19 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
         listView.setHasFixedSize(true);
 
         /*Test data*/
-        categories.add("SCHOOL".toLowerCase());
-        categories.add("FASHION".toLowerCase());
-        categories.add("NEWS".toLowerCase());
-        categories.add("TECH".toLowerCase());
-        categories.add("SOCIAL".toLowerCase());
-        categories.add("ONLINE SHOPPING".toLowerCase());
+        categories.add(StringUsage.stdFormat("EDUCATION"));
+        categories.add(StringUsage.stdFormat("FASHION"));
+        categories.add(StringUsage.stdFormat("NewS"));
+        categories.add(StringUsage.stdFormat("TECh"));
+        categories.add(StringUsage.stdFormat("SocIAl"));
+        categories.add(StringUsage.stdFormat("OnliNE ShOppIng"));
 
         menuAdapter.notifyDataSetChanged();
 
+        categoriesSet = new HashSet<>();
+        sharedPreferences = getSharedPreferences("categories", Context.MODE_PRIVATE);
+
+        //TODO: Store data SQL or sharedpreferences
 
         //TODO: Load from Local storage
         //TODO: Add a loader while scrolling
@@ -66,11 +80,27 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
 
     }
 
+    /*
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        saveData();
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onRestoreInstanceState(savedInstanceState, persistentState);
+        sharedPreferences =
+                getSharedPreferences("categories", Context.MODE_PRIVATE);
+    }*/
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -92,7 +122,7 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
 
     public void addItem(){
         FragmentManager fm = getFragmentManager();
-        AddItemDialogFrag df = AddItemDialogFrag.newInstance("New Category",categories);
+        AddItemDialogFrag df = AddItemDialogFrag.newInstance("New Category",null);
         df.show(fm, "add_item_frag");
     }
 
@@ -113,23 +143,36 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
 
     @Override
     public int handleUserInput(String input, String inputCategory, String inputUrl, String inputDesc) {
-        input = input.toLowerCase();
-        input = input.trim();
 
-        if (categories.contains(input)){
+        if (categories.contains(StringUsage.stdFormat(input))){
             return -1;
         }
         else if(input.length() == 0){
             return 0;
         }
         else{
-            categories.add(input.toLowerCase());
+            categories.add(input);
+
+            saveData();
+
             Toast.makeText(this,"Category added",Toast.LENGTH_SHORT).show();
             menuAdapter.notifyDataSetChanged();
             return 1;
         }
     }
 
+    public void saveData(){
+        for(String s : categories){
+            categoriesSet.add(s);
+        }
+        editor = sharedPreferences.edit();
+        editor.putStringSet("categories", categoriesSet);
+        editor.commit();
+    }
+
     public static ArrayList<String> getCategories(){return categories;}
+
+    //TODO: REMOve later
+    public Activity getActivity(){return this;}
 }
 

@@ -1,8 +1,10 @@
 package me.kulam.pagefetch;
 
+import android.app.Activity;
 import android.bluetooth.le.AdvertiseData;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.view.LayoutInflater;
@@ -14,6 +16,8 @@ import android.widget.Toast;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Sharu95 on 04/03/2016.
@@ -43,7 +47,6 @@ public class menuAdapter extends RecyclerView.Adapter<menuAdapter.MenuViewHolder
                     {
                         Intent intent = new Intent(v.getContext(), cardActivity.class);
                         intent.putExtra("category",categoryName.getText().toString());
-                        intent.putStringArrayListExtra("categories",categories);
                         v.getContext().startActivity(intent);
                     }
                 }
@@ -72,19 +75,7 @@ public class menuAdapter extends RecyclerView.Adapter<menuAdapter.MenuViewHolder
     public void onBindViewHolder(MenuViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        String finite = "";
-        String category = categories.get(position);
-        finite = formatString(finite, category);
-        holder.categoryName.setText(finite);
-    }
-
-    public String formatString(String finite,String category){
-        char firstChar = category.charAt(0);
-        firstChar = Character.toUpperCase(firstChar);
-        category = category.toLowerCase();
-        finite+=firstChar;
-        finite+=category.substring(1,category.length());
-        return finite;
+        holder.categoryName.setText(StringUsage.stdFormat(categories.get(position)));
     }
 
     // Return the size of your dataset (invoked by the layout manager)

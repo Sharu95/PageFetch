@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -92,7 +93,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         protected TextView cardTitle;
         protected TextView cardDesc;
         protected ImageView cardImg;
-        protected ImageView open_page;
+        protected Button open_page;
         protected String pageUrl;
 
         //For primary list
@@ -106,10 +107,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
                 cardTitle = (TextView) v.findViewById(R.id.card_title);
                 cardDesc = (TextView) v.findViewById(R.id.card_desc);
                 cardImg = (ImageView) v.findViewById(R.id.card_img);
-                open_page = (ImageView) v.findViewById(R.id.card_open_page);
+                open_page = (Button) v.findViewById(R.id.card_open_page);
                 pageUrl = "";
-
-                cardImg.setImageResource(R.drawable.card_img_fashion);
 
                 open_page.setOnClickListener(new View.OnClickListener() {
                     @Override

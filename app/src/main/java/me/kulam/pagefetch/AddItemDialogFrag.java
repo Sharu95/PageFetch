@@ -1,7 +1,9 @@
 package me.kulam.pagefetch;
 
+import android.app.ActionBar;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.URLUtil;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -28,15 +32,13 @@ public class AddItemDialogFrag extends DialogFragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private static ArrayList<String> validCategories;
     private EditText categoryInput;
     private EditText pageTitle;
     private EditText pageDesc;
-    private EditText pageCategory;
+    private TextView pageCategory; //TODO: TMP TEXT
     private EditText pageUrl;
 
-    private AutoCompleteTextView autoFillCategory;
-
+    private String category;
     private String title;
 
     private OnFragmentInteractionListener mListener;
@@ -52,11 +54,11 @@ public class AddItemDialogFrag extends DialogFragment {
      * @return A new instance of fragment AddItemDialogFrag.
      */
     // TODO: Rename and change types and number of parameters
-    public static AddItemDialogFrag newInstance(String title, ArrayList<String> validCategories) {
+    public static AddItemDialogFrag newInstance(String title, String category) {
         AddItemDialogFrag fragment = new AddItemDialogFrag();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, title);
-        args.putStringArrayList("categories",validCategories);
+        args.putString(ARG_PARAM2, category);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,7 +68,7 @@ public class AddItemDialogFrag extends DialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             title = getArguments().getString(ARG_PARAM1);
-            validCategories = getArguments().getStringArrayList("categories");
+            category = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -77,46 +79,28 @@ public class AddItemDialogFrag extends DialogFragment {
         View view;
         TextView addItemTitle;
 
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
         if(title.equalsIgnoreCase("New Category")){
             view = inflater.inflate(R.layout.add_item_frag, container);
             btn = (Button) view.findViewById(R.id.add_item_btn);
             categoryInput = (EditText) view.findViewById(R.id.add_item_input); //Global scope for onClick purpose
+            categoryInput.requestFocus();
             addItemTitle = (TextView) view.findViewById(R.id.add_item_title);
-
         } else{
             view = inflater.inflate(R.layout.add_page_frag, container);
             btn = (Button) view.findViewById(R.id.add_page_btn);
             addItemTitle = (TextView) view.findViewById(R.id.add_page_title);
 
             pageTitle = (EditText) view.findViewById(R.id.add_page_input_title); //Global scope for onClick purpose;
-            pageTitle.requestFocus(View.FOCUS_DOWN);
+            pageTitle.requestFocus();
 
-            //pageCategory = (EditText) view.findViewById(R.id.add_page_input_category); //Global scope for onClick purpose;
-            //pageCategory.requestFocus(View.FOCUS_DOWN);
-
-            //TODO: CHECK IF VALID CATEGORY
-
-            String[] cat = new String[validCategories.size()];
-            for(int i = 0; i < cat.length; i++){
-                String s = validCategories.get(i);
-                String finite = "";
-                char first = s.charAt(0);
-                first = Character.toUpperCase(first);
-                finite += first;
-                finite += s.substring(1,s.length());
-                cat[i] = finite;
-            }
-            autoFillCategory = (AutoCompleteTextView) view.findViewById(R.id.add_page_input_category);
-            ArrayAdapter<String> tmpAdapter = new ArrayAdapter<>(getDialog().getContext(),android.R.layout.simple_list_item_1,cat);
-            autoFillCategory.setAdapter(tmpAdapter);
-            autoFillCategory.setThreshold(1);
+            pageCategory = (TextView) view.findViewById(R.id.add_page_input_category); //Global scope for onClick purpose;
+            pageCategory.setText(category);
 
             pageUrl = (EditText) view.findViewById(R.id.add_page_input_url); //Global scope for onClick purpose;
-            pageUrl.requestFocus(View.FOCUS_DOWN);
 
             pageDesc = (EditText) view.findViewById(R.id.add_page_input_desc); //Global scope for onClick purpose;
-            pageDesc.requestFocus(View.FOCUS_DOWN);
-
         }
         addItemTitle.setText(title); //Move out later
 
@@ -135,13 +119,12 @@ public class AddItemDialogFrag extends DialogFragment {
                         getDialog().dismiss();
                     }
                 } else {
-                    String inputTitle = pageTitle.getText().toString();
-                    String inputCategory = pageCategory.getText().toString();
+                    String inputTitle = pageTitle.getText().toString().trim();
+                    String inputCategory = pageCategory.getText().toString().trim();
                     String inputUrl = pageUrl.getText().toString();
-                    String inputDesc = pageDesc.getText().toString();
+                    String inputDesc = pageDesc.getText().toString().trim();
 
                     String validUrlHTTP = "http://www." + inputUrl.toLowerCase().trim();
-                    //String validUrlHTTPS = "https://www."+inputUrl.toLowerCase().trim();
 
                     //TODO: Get image
                     //TODO: Check edit text input wrong input
@@ -149,7 +132,7 @@ public class AddItemDialogFrag extends DialogFragment {
                         Toast.makeText(getDialog().getContext(), "Some fields are empty", Toast.LENGTH_SHORT).show();
                     } else {
                         int MAX_DESC_LENGTH = ((cardActivity) getActivity()).getMaxDescSize();
-                        if (URLUtil.isValidUrl(validUrlHTTP)) {
+                        if (StringUsage.URLchecker(validUrlHTTP)) {
                             if (inputDesc.length() > MAX_DESC_LENGTH) {
                                 Toast.makeText(getDialog().getContext(), "Description too long", Toast.LENGTH_SHORT).show();
                             } else {

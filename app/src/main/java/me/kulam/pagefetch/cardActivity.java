@@ -1,5 +1,6 @@
 package me.kulam.pagefetch;
 
+import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ClipData;
@@ -22,11 +23,9 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
     private RecyclerView listView;
     private RecyclerView.Adapter cardAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private static final int MAX_DESC_LENGTH = 25;
+    private static final int MAX_DESC_LENGTH = 150;
     private static ArrayList<Page> categoryPages;
     private ArrayList<Page> validPages;
-
-    private ArrayList<String> categories;
 
     private String category;
 
@@ -42,10 +41,11 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             category = extras.getString("category");
-            categories = extras.getStringArrayList("categories");//TODO: Redundant
         }
 
-        cardAdapter = new cardAdapter(this,category,validPages);
+        this.setTitle(category);
+
+        cardAdapter = new cardAdapter(validPages,this);
         listView.setAdapter(cardAdapter);
 
         layoutManager = new LinearLayoutManager(this);
@@ -61,12 +61,15 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
 
         //TODO: Description max size = 150 characters
         categoryPages.add(new Page("Facebook","Social","http://facebook.com","It was popularised"));
-        categoryPages.add(new Page("Facebook","Social","http://twitter.com","This is a social page."));
+        categoryPages.add(new Page("Twitter","Social","http://twitter.com","This is a social page."));
 
-        categoryPages.add(new Page("VG","News", "http://vg.no","This is a News page."));
+        categoryPages.add(new Page("VG", "News", "http://vg.no", "This is a News page."));
         categoryPages.add(new Page("Aftenposten","News", "http://aftenposten.no","This is a News page."));
-        categoryPages.add(new Page("DB","News", "http://dagbladet.no","This is a News page."));
-        categoryPages.add(new Page("NA","News", "http://nettavisen.no","This is a News page."));
+        categoryPages.add(new Page("Dagbladet","News", "http://dagbladet.no","This is a News page."));
+        categoryPages.add(new Page("Nettavisen","News", "http://nettavisen.no","This is a News page."));
+
+        categoryPages.add(new Page("Techcrunch","Tech", "http://techcrunch.com","This is a tech page."));
+        categoryPages.add(new Page("Bekk","Tech", "http://bekk.no","This is a tech page."));
 
         for(Page page : categoryPages){
             if (page.getCategory().trim().equalsIgnoreCase(category)){
@@ -86,6 +89,7 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
 
         //TODO: Check if specified category. Add to card list if so.
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -113,7 +117,7 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
 
     public void addItem(){
         FragmentManager fm = getFragmentManager();
-        AddItemDialogFrag df = AddItemDialogFrag.newInstance("New Page",categories);
+        AddItemDialogFrag df = AddItemDialogFrag.newInstance("New Page",category);
         df.show(fm, "add_page_frag");
 
         //TODO: Add item, remember multiple constructors

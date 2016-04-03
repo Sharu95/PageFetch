@@ -60,7 +60,7 @@
                 android:nextFocusDown="@+id/add_page_input_category"
                 android:singleLine="true"/>
 
-            <AutoCompleteTextView
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:id="@+id/add_page_input_category"
@@ -69,11 +69,15 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:hint="Category..."
                 android:fontFamily="Roboto"
+                android:textColor="#000000"
+                android:inputType="none"
                 android:textSize="17sp"
                 android:nextFocusDown="@+id/add_page_input_url"
-                android:singleLine="true" />
+                android:gravity="center_vertical"
+                android:textAppearance="?android:attr/textAppearanceMediumInverse"
+                android:background="?attr/editTextBackground"/>
+            <!--android:textAppearance="@style/TextAppearance.AppCompat.Button"-->
 
             <EditText
                 android:layout_width="match_parent"
