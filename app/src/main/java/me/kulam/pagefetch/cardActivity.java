@@ -5,6 +5,10 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ClipData;
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -28,6 +33,7 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
     private ArrayList<Page> validPages;
 
     private String category;
+    private FloatingActionButton fButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,23 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
             category = extras.getString("category");
         }
 
+        fButton = (FloatingActionButton) findViewById(R.id.fab_add_category);
+        fButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addItem();
+            }
+        });
+        listView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING)
+                    fButton.hide();
+                else if (newState == RecyclerView.SCROLL_STATE_IDLE)
+                    fButton.show();
+            }
+        });
         this.setTitle(category);
 
         cardAdapter = new cardAdapter(validPages,this);
@@ -60,21 +83,24 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
 
 
         //TODO: Description max size = 150 characters
-        categoryPages.add(new Page("Facebook","Social","http://facebook.com","It was popularised"));
-        categoryPages.add(new Page("Twitter","Social","http://twitter.com","This is a social page."));
+        categoryPages.add(new Page("Facebook","Social","facebook.com","It was popularised"));
+        categoryPages.add(new Page("Twitter", "Social", "twitter.com", "This is a social page."));
+        categoryPages.add(new Page("Telenor","Social","telenor.com","It was popularised"));
+        categoryPages.add(new Page("Google","Social","google.com","This is a social page."));
+        categoryPages.add(new Page("Techcrunch","Social", "techcrunch.com","This is a tech page."));
+        categoryPages.add(new Page("Bekk","Social", "bekk.no","This is a tech page."));
 
-        categoryPages.add(new Page("VG", "News", "http://vg.no", "This is a News page."));
-        categoryPages.add(new Page("Aftenposten","News", "http://aftenposten.no","This is a News page."));
-        categoryPages.add(new Page("Dagbladet","News", "http://dagbladet.no","This is a News page."));
-        categoryPages.add(new Page("Nettavisen","News", "http://nettavisen.no","This is a News page."));
+        categoryPages.add(new Page("VG", "News", "vg.no", "This is a News page."));
+        categoryPages.add(new Page("Aftenposten","News", "aftenposten.no","This is a News page."));
+        categoryPages.add(new Page("Dagbladet","News", "dagbladet.no","This is a News page."));
+        categoryPages.add(new Page("Nettavisen","News", "nettavisen.no","This is a News page."));
 
-        categoryPages.add(new Page("Techcrunch","Tech", "http://techcrunch.com","This is a tech page."));
-        categoryPages.add(new Page("Bekk","Tech", "http://bekk.no","This is a tech page."));
+        categoryPages.add(new Page("Techcrunch","Tech", "techcrunch.com","This is a tech page."));
+        categoryPages.add(new Page("Bekk","Tech", "bekk.no","This is a tech page."));
 
         for(Page page : categoryPages){
             if (page.getCategory().trim().equalsIgnoreCase(category)){
                 validPages.add(page);
-                System.out.println(page.getTitle());
             }
         }
         cardAdapter.notifyDataSetChanged();
@@ -99,14 +125,8 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        /*Want to add item? */
-        if (item.getItemId() == R.id.add_item){
-            addItem();
-            return true;
-        }
         /*Want to search for item?*/
-        else if (item.getItemId() == R.id.search_list){
+        if (item.getItemId() == R.id.search_list){
             //searchForItem();
             return true;
         }

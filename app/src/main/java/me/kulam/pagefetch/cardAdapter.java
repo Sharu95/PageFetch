@@ -3,17 +3,21 @@ package me.kulam.pagefetch;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 //picasso and jsoup
@@ -44,12 +48,34 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder>{
     private String pressedCategory;
 
     public void removeCard(int position){
-        validPages.remove(position);
+        final Page removedPage = validPages.get(position);
+        final int removedPos = position;
+        validPages.remove(removedPage);
         notifyItemRemoved(position);
+
+        Snackbar undoBar = Snackbar
+                .make((((cardActivity) context).findViewById(R.id.crd_layout)), "Page was removed", Snackbar.LENGTH_LONG);
+
+                undoBar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        validPages.add(removedPos, removedPage);
+                        notifyItemInserted(removedPos);
+                    }
+                });
+        undoBar.setActionTextColor(Color.YELLOW);
+
+        // Changing action button text color
+       // View sbView = undoBar.getView();
+        //TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        //textView.setTextColor(Color.WHITE);
+        undoBar.show();
+
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //For small card
+        protected RelativeLayout relativeLayout;
         protected CardView cardView;
         protected TextView cardTitle;
         protected TextView cardDesc;
@@ -73,7 +99,9 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder>{
             cardDesc = (TextView) v.findViewById(R.id.card_desc);
             cardImg = (ImageView) v.findViewById(R.id.card_img);
             open_page = (Button) v.findViewById(R.id.card_open_page);
+            relativeLayout = (RelativeLayout) v.findViewById(R.id.card_open_page_holder);
             pageUrl = "";
+
 
             open_page.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -156,36 +184,40 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder>{
         holder.cardDesc.setText(page.getDescription());
         holder.setUrl(page.getUrl());
 
+        String [] urlSplit = page.getUrl().trim().split("\\.");
+        String pageName = urlSplit[1];//TODO: Handle arrayindexoutofboundsexception
+
+        //TODO: Picasso. Resize to cardImg first also
+        //PICASSO
+
+        //TODO: Not conventional. Use databases, like firebase instead.
+        String testImgUrl = "http://www.kulam.me/applications/pagefetch/pageicons/"+pageName+".png";
+
+
+        Picasso.with(context).load(testImgUrl).into(holder.cardImg);
+
 
         //TODO: Works, export to get from database
+        /*
         Resources resources = context.getResources();
         int resourceId = getResId(resources,page);
         holder.cardImg.setImageResource(resourceId);
-
-
-
-        /*//For big card
-        holder.bigCardTitle.setText(page.getTitle());
-        holder.setUrl(page.getUrl());
         */
-        //See for bigcard img below with picasso
+
+        /*
+        database.child("message").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                snapshot.child("pageTitle");
+
+            }
+            @Override public void onCancelled(FirebaseError error) { }
+        });*/
 
         //FOR HTML PARSING in ASYNCTASK
         //String pageUrl = holder.pageUrl;
         //String testURL = "http://www.";
         //new RunTask().execute(testURL);
-
-
-        //TODO: Picasso. Resize to cardImg first also
-        //TODO: Or load from external database
-
-        //PICASSO
-        //String testImgUrl = "https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-128.png";
-        //Picasso.with(context).load(testImgUrl).resize(75,75).centerCrop().into(holder.cardImg);
-
-
-        //holder.cardImg.setImageResource(R.drawable.card_img_fashion);
-
 
     }
 

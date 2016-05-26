@@ -27,7 +27,7 @@
                 android:id="@+id/add_item_btn"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:background="@color/addButton"
+                android:background="@color/pageTmp"
                 android:text="ADD" />
 
             <TextView
@@ -43,7 +43,7 @@
                 android:textAlignment="center"
                 android:textSize="20sp"
                 android:fontFamily="Roboto"
-                android:background="@color/dialogColor"
+                android:background="@color/itemTmp"
                 android:textColor="@color/dialogText"/>
     </RelativeLayout>
 </RelativeLayout>

@@ -3,6 +3,7 @@
     package="me.kulam.pagefetch">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -13,11 +14,11 @@
         <activity android:name=".menuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".cardActivity" />
+        <activity android:name=".cardActivity" />x
         <activity android:name=".WebActivity"/>
     </application>
 

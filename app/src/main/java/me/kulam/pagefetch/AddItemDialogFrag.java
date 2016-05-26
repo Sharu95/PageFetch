@@ -136,7 +136,8 @@ public class AddItemDialogFrag extends DialogFragment {
                             if (inputDesc.length() > MAX_DESC_LENGTH) {
                                 Toast.makeText(getDialog().getContext(), "Description too long", Toast.LENGTH_SHORT).show();
                             } else {
-                                mListener.handleUserInput(inputTitle, inputCategory, validUrlHTTP, inputDesc); //Callback
+                                mListener.handleUserInput(inputTitle, inputCategory, inputUrl, inputDesc); //Callback
+
                                 getDialog().dismiss();
                             }
                             //Toast.makeText(getDialog().getContext(),"Valid HTTP", Toast.LENGTH_SHORT).show();

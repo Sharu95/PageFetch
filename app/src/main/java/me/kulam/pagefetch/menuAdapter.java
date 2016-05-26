@@ -56,7 +56,15 @@ public class menuAdapter extends RecyclerView.Adapter<menuAdapter.MenuViewHolder
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public menuAdapter(ArrayList<String> categories){
+
         this.categories = categories;
+
+        this.categories.add(StringUsage.stdFormat("EDUCATION"));
+        this.categories.add(StringUsage.stdFormat("FASHION"));
+        this.categories.add(StringUsage.stdFormat("NewS"));
+        this.categories.add(StringUsage.stdFormat("TECh"));
+        this.categories.add(StringUsage.stdFormat("SocIAl"));
+        this.categories.add(StringUsage.stdFormat("OnliNE ShOppIng"));
     }
 
     // Create new views (invoked by the layout manager)

@@ -19,7 +19,7 @@ public class Page{
     {
         this.title = title;
         this.description = description;
-        this.url = url;
+        this.url = "http://www."+url;
         this.category = category;
 
         //TODO: Set image resource when creating page.
@@ -30,7 +30,7 @@ public class Page{
     {
         this.title = StringUsage.stdFormat(title);
         this.category = category;
-        this.url = url;
+        this.url = "http://www."+url;
         //TODO: Set image resource when creating page.
     }
 

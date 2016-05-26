@@ -2,18 +2,25 @@ package me.kulam.pagefetch;
 
 import android.content.ClipData;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.View;
+import android.widget.TextView;
 
 /**
  * Created by Sharu on 28/03/2016.
  */
 
 //Callback is not manually implemented. Using superclass callback
-public class SwipeCards extends ItemTouchHelper.Callback{
+public class SwipeCards extends ItemTouchHelper.Callback {
 
 
     private final RecyclerView.Adapter mAdapter;
+    private CardView deletedCard;
+    private int deletedPos;
 
     public SwipeCards(RecyclerView.Adapter adapter) {
         mAdapter = adapter;
@@ -32,8 +39,7 @@ public class SwipeCards extends ItemTouchHelper.Callback{
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-         ((cardAdapter) mAdapter).removeCard(viewHolder.getAdapterPosition());
-
+        ((cardAdapter) mAdapter).removeCard(viewHolder.getAdapterPosition());
     }
 
     @Override

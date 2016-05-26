@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/primary">
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="520dp"
+        android:layout_centerInParent="true"
+        android:clipToPadding="false">
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/no_connection_sadface"
+            android:id="@+id/noconnection_sad"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:text="You&apos;re not connected to the internet"
+            android:id="@+id/connection_title"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/icons"
+            android:textSize="30sp"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_below="@+id/noconnection_sad"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="20dp"
+            android:text="Check your connection and try again"
+            android:id="@+id/connection_desc"
+            android:layout_below="@+id/connection_title"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/icons"
+            android:textSize="15sp"
+            android:gravity="center_horizontal|top|center_vertical"
+            />
+
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/connection_desc"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/loader_container"></RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/loader_container"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:elevation="3dp">
+
+            <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Connect"
+            android:textColor="@color/icons"
+            android:id="@+id/connect_btn"
+            android:background="?android:attr/selectableItemBackground"/>
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+</RelativeLayout>
