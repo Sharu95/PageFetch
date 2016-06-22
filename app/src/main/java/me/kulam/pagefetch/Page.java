@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by Sharu on 14/03/2016.
  */
-public class Page{
+public class Page implements java.io.Serializable{
     private String title;
     private String description;
     private Image image;
@@ -19,7 +19,7 @@ public class Page{
     {
         this.title = title;
         this.description = description;
-        this.url = "http://www."+url;
+        this.url = "http://"+url;
         this.category = category;
 
         //TODO: Set image resource when creating page.

@@ -17,6 +17,7 @@ import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -39,18 +40,9 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
 {
     private RecyclerView listView;
     private RecyclerView.Adapter menuAdapter;
-
     private RecyclerView.LayoutManager mLayoutManager;
     private static ArrayList<String> categories;
-    private static Set<String> categoriesSet;
-
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
-
-    //TODO: Potentially remove
     private FloatingActionButton fButton;
-
-    private volatile int connected  = 0;
 
     public void initAll(){
         setContentView(R.layout.activity_recyclerlist);
@@ -71,6 +63,9 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
                     fButton.show();
                 else if (newState == RecyclerView.SCROLL_STATE_DRAGGING)
                     fButton.hide();
+                else{
+                    fButton.show();
+                }
 
             }
         });
@@ -82,22 +77,6 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
         mLayoutManager = new LinearLayoutManager(this);
         listView.setLayoutManager(mLayoutManager);
         listView.setHasFixedSize(true);
-
-        /*Test data*/
-        //menuAdapter.notifyItemInserted(0); //.notifyDataSetChanged();
-
-        categoriesSet = new HashSet<>();
-        sharedPreferences = getSharedPreferences("categories", Context.MODE_PRIVATE);
-    }
-
-    public boolean hasInternetConnection(){
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    public boolean connectingOrConnected(NetworkInfo activeNetworkInfo){
-        return activeNetworkInfo.getState() == NetworkInfo.State.CONNECTED;
     }
 
     @Override
@@ -106,38 +85,21 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
         super.onCreate(savedInstanceState);
 
         initAll();
+
+
         //TODO: NETWORK
 
         //TODO: Store data SQL or sharedpreferences
 
         //TODO: Load from Local storage
         //TODO: Add a loader while scrolling
-
-        //menuAdapter = new RecyclerAdapter(this);
-
     }
-
-    /*
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        saveData();
-        super.onSaveInstanceState(outState, outPersistentState);
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onRestoreInstanceState(savedInstanceState, persistentState);
-        sharedPreferences =
-                getSharedPreferences("categories", Context.MODE_PRIVATE);
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -183,22 +145,10 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
             return 0;
         } else {
             categories.add(input);
-
-            saveData();
-
             Toast.makeText(this,"Category added",Toast.LENGTH_SHORT).show();
             menuAdapter.notifyDataSetChanged();
             return 1;
         }
-    }
-
-    public void saveData(){
-        for(String s : categories){
-            categoriesSet.add(s);
-        }
-        editor = sharedPreferences.edit();
-        editor.putStringSet("categories", categoriesSet);
-        editor.commit();
     }
 
     public static ArrayList<String> getCategories(){return categories;}

@@ -5,7 +5,9 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.PersistableBundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,6 +23,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 public class cardActivity extends AppCompatActivity implements AddItemDialogFrag.OnFragmentInteractionListener
@@ -29,26 +33,15 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
     private RecyclerView.Adapter cardAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private static final int MAX_DESC_LENGTH = 150;
-    private static ArrayList<Page> categoryPages;
+    private static ArrayList<Page> allPages;
     private ArrayList<Page> validPages;
+    private SharedPreferences preferences;
+
 
     private String category;
     private FloatingActionButton fButton;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recyclerlist);
-        listView = (RecyclerView) findViewById(R.id.list_view);
-
-        categoryPages = new ArrayList<>();
-        validPages = new ArrayList<>();
-
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            category = extras.getString("category");
-        }
-
+    public void addFAB(){
         fButton = (FloatingActionButton) findViewById(R.id.fab_add_category);
         fButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,54 +59,69 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
                     fButton.show();
             }
         });
-        this.setTitle(category);
+    }
 
-        cardAdapter = new cardAdapter(validPages,this);
-        listView.setAdapter(cardAdapter);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_recyclerlist);
+        preferences = this.getPreferences(MODE_PRIVATE);
 
-        layoutManager = new LinearLayoutManager(this);
-        listView.setLayoutManager(layoutManager);
-        listView.setHasFixedSize(true);
-
-        //TODO: Give option to get back deleted card, timeout for restoration
-        ItemTouchHelper.Callback swipeCards = new SwipeCards(cardAdapter);
-        ItemTouchHelper helper = new ItemTouchHelper(swipeCards);
-        helper.attachToRecyclerView(listView);
-
-
-
-        //TODO: Description max size = 150 characters
-        categoryPages.add(new Page("Facebook","Social","facebook.com","It was popularised"));
-        categoryPages.add(new Page("Twitter", "Social", "twitter.com", "This is a social page."));
-        categoryPages.add(new Page("Telenor","Social","telenor.com","It was popularised"));
-        categoryPages.add(new Page("Google","Social","google.com","This is a social page."));
-        categoryPages.add(new Page("Techcrunch","Social", "techcrunch.com","This is a tech page."));
-        categoryPages.add(new Page("Bekk","Social", "bekk.no","This is a tech page."));
-
-        categoryPages.add(new Page("VG", "News", "vg.no", "This is a News page."));
-        categoryPages.add(new Page("Aftenposten","News", "aftenposten.no","This is a News page."));
-        categoryPages.add(new Page("Dagbladet","News", "dagbladet.no","This is a News page."));
-        categoryPages.add(new Page("Nettavisen","News", "nettavisen.no","This is a News page."));
-
-        categoryPages.add(new Page("Techcrunch","Tech", "techcrunch.com","This is a tech page."));
-        categoryPages.add(new Page("Bekk","Tech", "bekk.no","This is a tech page."));
-
-        for(Page page : categoryPages){
-            if (page.getCategory().trim().equalsIgnoreCase(category)){
-                validPages.add(page);
+        if(savedInstanceState != null){
+            for(Page page : allPages){
+                Gson gson = new Gson();
+                String json = preferences.getString(page.getTitle(), "");
+                Page p = gson.fromJson(json, Page.class);
             }
+        }else {
+
+            listView = (RecyclerView) findViewById(R.id.list_view);
+            allPages = new ArrayList<>();
+            validPages = new ArrayList<>();
+
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                category = extras.getString("category");
+            }
+
+            addFAB();
+
+            this.setTitle(category);
+            cardAdapter = new cardAdapter(validPages, this);
+            listView.setAdapter(cardAdapter);
+
+            layoutManager = new LinearLayoutManager(this);
+            listView.setLayoutManager(layoutManager);
+            listView.setHasFixedSize(true);
+
+            ItemTouchHelper.Callback swipeCards = new SwipeCards(cardAdapter);
+            ItemTouchHelper helper = new ItemTouchHelper(swipeCards);
+            helper.attachToRecyclerView(listView);
+
+            //TODO: Description max size = 150 characters
+            allPages.add(new Page("Facebook", "Social", "facebook.com", "It was popularised"));
+            allPages.add(new Page("Twitter", "Social", "twitter.com", "This is a social page."));
+            allPages.add(new Page("Telenor", "Social", "telenor.com", "It was popularised"));
+            allPages.add(new Page("Google", "Social", "google.com", "This is a social page."));
+            allPages.add(new Page("Techcrunch", "Social", "techcrunch.com", "This is a tech page."));
+            allPages.add(new Page("Bekk", "Social", "bekk.no", "This is a tech page."));
+
+            allPages.add(new Page("VG", "News", "vg.no", "This is a News page."));
+            allPages.add(new Page("Aftenposten", "News", "aftenposten.no", "This is a News page."));
+            allPages.add(new Page("Dagbladet", "News", "dagbladet.no", "This is a News page."));
+            allPages.add(new Page("Nettavisen", "News", "nettavisen.no", "This is a News page."));
+
+            allPages.add(new Page("Techcrunch", "Tech", "techcrunch.com", "This is a tech page."));
+            allPages.add(new Page("Bekk", "Tech", "bekk.no", "This is a tech page."));
+
+            for (Page page : allPages) {
+                if (page.getCategory().trim().equalsIgnoreCase(category)) {
+                    validPages.add(page);
+                }
+            }
+            cardAdapter.notifyDataSetChanged();
         }
-        cardAdapter.notifyDataSetChanged();
-
-
-
-
-
-        //cardAdapter = new RecyclerAdapter(this);
-
         //TODO: Load pages from local storage.
-
-        //TODO: Check if specified category. Add to card list if so.
     }
 
 
@@ -143,7 +151,6 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
         //TODO: Add item, remember multiple constructors
         //TODO: Check validity of URL
         //TODO: Fetch picture from page
-        //TODO:
     }
 
     public void exitDialog(View v){
@@ -153,8 +160,8 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
             runningFragment.dismiss();
         }
     }
-    public static ArrayList<Page> getCategoryPages(){
-        return categoryPages;
+    public static ArrayList<Page> getAllpages(){
+        return allPages;
     }
 
     @Override
@@ -174,5 +181,36 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
 
     public int getMaxDescSize(){
         return MAX_DESC_LENGTH;
+    }
+
+    /*States*/
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        SharedPreferences.Editor prefsEditor;
+        Gson gson;
+        String json;
+
+        for(Page page : allPages){
+            prefsEditor = preferences.edit();
+            gson = new Gson();
+            json = gson.toJson(page);
+            prefsEditor.putString(page.getTitle(), json);
+            prefsEditor.apply();
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
+
+        for(Page page : allPages){
+            Gson gson = new Gson();
+            String json = preferences.getString(page.getTitle(), "");
+            Page p = gson.fromJson(json, Page.class);
+        }
+
+        super.onRestoreInstanceState(savedInstanceState, persistentState);
+
     }
 }
