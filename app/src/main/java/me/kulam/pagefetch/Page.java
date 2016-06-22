@@ -32,6 +32,16 @@ public class Page implements java.io.Serializable{
         this.category = category;
         this.url = "http://www."+url;
         //TODO: Set image resource when creating page.
+
+        /**
+         * tes
+         * test
+         * st
+         * es
+         * tes
+         * tset
+         * s
+         */
     }
 
     public String getTitle(){
