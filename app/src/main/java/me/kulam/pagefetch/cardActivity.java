@@ -34,7 +34,7 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
     private RecyclerView.LayoutManager layoutManager;
     private static final int MAX_DESC_LENGTH = 150;
     private static ArrayList<Page> allPages;
-    private ArrayList<Page> validPages;
+    private static ArrayList<Page> validPages;
 
     private String category;
     private FloatingActionButton fButton;
@@ -99,13 +99,10 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
         super.onStop();
 
         SharedPreferences.Editor editor = sPref.edit();
-        System.out.println("onStop Card");
         editor.putInt("totalPages", allPages.size());
 
         String encode = "Page";
         int ID = 0;
-
-        validPages.clear();
 
         for(int i = 0; i < allPages.size(); i++){
             editor.putString(encode+ID,allPages.get(i).getTitle());
@@ -119,8 +116,8 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
 
             editor.apply();
         }
-
-
+        allPages.clear();
+        me.kulam.pagefetch.cardAdapter.getValidPages().clear();
     }
 
 
@@ -136,8 +133,6 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
 
         if(totalPages != -1){
             for(int i = 0; i < totalPages; i++){
-                System.out.println("onStart recreate card");
-
                 //Baaaaaaad
                 title = sPref.getString(encode+ID,"noTitle");
                 ID++;
@@ -148,11 +143,8 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
                 category = sPref.getString(encode+ID,"noCat");
                 ID++;
 
-                System.out.println("allpages size update " + allPages.size());
                 Page newPage = new Page(title,category,url,desc);
-                if(!allPages.contains(newPage)){
-                    allPages.add(newPage);
-               }
+                allPages.add(newPage);
             }
         }
         else{

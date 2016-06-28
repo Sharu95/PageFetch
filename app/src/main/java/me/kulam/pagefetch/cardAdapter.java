@@ -40,7 +40,7 @@ import java.util.Arrays;
  * Created by Sharu on 14/03/2016.
  */
 public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder>{
-    private ArrayList<Page> validPages;
+    private static ArrayList<Page> validPages;
     private Context context;
 
     public void removeCard(int position){
@@ -57,8 +57,8 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder>{
                     @Override
                     public void onClick(View v) {
                         validPages.add(removedPos, removedPage);
-                        cardActivity.getAllpages().add(removedPage);
                         notifyItemInserted(removedPos);
+                        cardActivity.getAllpages().add(removedPage);
                     }
                 });
         undoBar.setActionTextColor(Color.YELLOW);
@@ -148,7 +148,7 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder>{
         return validPages.size();
     }
 
-    public ArrayList<Page> getValidPages(){
+    public static ArrayList<Page> getValidPages(){
         return validPages;
     }
 

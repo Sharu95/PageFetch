@@ -111,6 +111,8 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
             editor.putString("" + i, me.kulam.pagefetch.menuAdapter.getCategory(i));
             editor.apply();
         }
+        categories.clear();
+        me.kulam.pagefetch.menuAdapter.getList().clear();
     }
 
     @Override
@@ -125,7 +127,7 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
             for(int i = 0; i < totalCategories; i++){
                 String category = categoryPref.getString("" + i, null);
 
-                if(category != null && !me.kulam.pagefetch.menuAdapter.getList().contains(category)){
+                if(category != null){
                     categories.add(category);
                     menuAdapter.notifyDataSetChanged();
                 }
