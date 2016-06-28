@@ -47,6 +47,7 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder>{
         final Page removedPage = validPages.get(position);
         final int removedPos = position;
         validPages.remove(removedPage);
+        cardActivity.getAllpages().remove(removedPage);
         notifyItemRemoved(position);
 
         Snackbar undoBar = Snackbar
@@ -56,6 +57,7 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder>{
                     @Override
                     public void onClick(View v) {
                         validPages.add(removedPos, removedPage);
+                        cardActivity.getAllpages().add(removedPage);
                         notifyItemInserted(removedPos);
                     }
                 });
@@ -109,7 +111,7 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder>{
 
     public cardAdapter(ArrayList<Page> validPages, Context context) {
         this.validPages = validPages;
-        this.context = context; //FOR PICASSSO
+        this.context = context;
         //this.pressedCategory = pressedCategory.toLowerCase();
     }
 
@@ -137,13 +139,17 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder>{
         holder.setUrl(page.getUrl());
 
         //TODO: Firebase integration for img picture
-        Picasso.with(context).load("http://www.kulam.me/applications/pagefetch/pageicons/telenor.png").into(holder.cardImg);
+        //Picasso.with(context).load("http://www.kulam.me/applications/pagefetch/pageicons/telenor.png").into(holder.cardImg);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return validPages.size();
+    }
+
+    public ArrayList<Page> getValidPages(){
+        return validPages;
     }
 
 

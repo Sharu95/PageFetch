@@ -128,8 +128,8 @@ public class AddItemDialogFrag extends DialogFragment {
 
                     //TODO: Get image
                     //TODO: Check edit text input wrong input
-                    if (inputTitle.length() == 0 || inputCategory.length() == 0 || inputUrl.length() == 0) {
-                        Toast.makeText(getDialog().getContext(), "Some fields are empty", Toast.LENGTH_SHORT).show();
+                    if (inputTitle.length() == 0 || inputUrl.length() == 0) {
+                        Toast.makeText(getDialog().getContext(), "Title or URL is empty", Toast.LENGTH_SHORT).show();
                     } else {
                         int MAX_DESC_LENGTH = ((cardActivity) getActivity()).getMaxDescSize();
                         if (StringUsage.URLchecker(validUrlHTTP)) {
@@ -137,7 +137,6 @@ public class AddItemDialogFrag extends DialogFragment {
                                 Toast.makeText(getDialog().getContext(), "Description too long", Toast.LENGTH_SHORT).show();
                             } else {
                                 mListener.handleUserInput(inputTitle, inputCategory, inputUrl, inputDesc); //Callback
-
                                 getDialog().dismiss();
                             }
                             //Toast.makeText(getDialog().getContext(),"Valid HTTP", Toast.LENGTH_SHORT).show();

@@ -35,12 +35,14 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
     private static final int MAX_DESC_LENGTH = 150;
     private static ArrayList<Page> allPages;
     private ArrayList<Page> validPages;
-    private SharedPreferences preferences;
-
 
     private String category;
     private FloatingActionButton fButton;
 
+    private SharedPreferences sPref;
+    private final String PAGE_PREF = "pagePref";
+
+    /*Add Floating Action Button*/
     public void addFAB(){
         fButton = (FloatingActionButton) findViewById(R.id.fab_add_category);
         fButton.setOnClickListener(new View.OnClickListener() {
@@ -65,15 +67,7 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recyclerlist);
-        preferences = this.getPreferences(MODE_PRIVATE);
-
-        if(savedInstanceState != null){
-            for(Page page : allPages){
-                Gson gson = new Gson();
-                String json = preferences.getString(page.getTitle(), "");
-                Page p = gson.fromJson(json, Page.class);
-            }
-        }else {
+        sPref = getSharedPreferences(PAGE_PREF,MODE_PRIVATE);
 
             listView = (RecyclerView) findViewById(R.id.list_view);
             allPages = new ArrayList<>();
@@ -97,31 +91,80 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
             ItemTouchHelper.Callback swipeCards = new SwipeCards(cardAdapter);
             ItemTouchHelper helper = new ItemTouchHelper(swipeCards);
             helper.attachToRecyclerView(listView);
+    }
 
-            //TODO: Description max size = 150 characters
-            allPages.add(new Page("Facebook", "Social", "facebook.com", "It was popularised"));
-            allPages.add(new Page("Twitter", "Social", "twitter.com", "This is a social page."));
-            allPages.add(new Page("Telenor", "Social", "telenor.com", "It was popularised"));
-            allPages.add(new Page("Google", "Social", "google.com", "This is a social page."));
-            allPages.add(new Page("Techcrunch", "Social", "techcrunch.com", "This is a tech page."));
-            allPages.add(new Page("Bekk", "Social", "bekk.no", "This is a tech page."));
 
-            allPages.add(new Page("VG", "News", "vg.no", "This is a News page."));
-            allPages.add(new Page("Aftenposten", "News", "aftenposten.no", "This is a News page."));
-            allPages.add(new Page("Dagbladet", "News", "dagbladet.no", "This is a News page."));
-            allPages.add(new Page("Nettavisen", "News", "nettavisen.no", "This is a News page."));
+    @Override
+    protected void onStop() {
+        super.onStop();
 
-            allPages.add(new Page("Techcrunch", "Tech", "techcrunch.com", "This is a tech page."));
-            allPages.add(new Page("Bekk", "Tech", "bekk.no", "This is a tech page."));
+        SharedPreferences.Editor editor = sPref.edit();
+        System.out.println("onStop Card");
+        editor.putInt("totalPages", allPages.size());
 
-            for (Page page : allPages) {
-                if (page.getCategory().trim().equalsIgnoreCase(category)) {
-                    validPages.add(page);
-                }
-            }
-            cardAdapter.notifyDataSetChanged();
+        String encode = "Page";
+        int ID = 0;
+
+        validPages.clear();
+
+        for(int i = 0; i < allPages.size(); i++){
+            editor.putString(encode+ID,allPages.get(i).getTitle());
+            ID++;
+            editor.putString(encode+ID,allPages.get(i).getDescription());
+            ID++;
+            editor.putString(encode+ID,allPages.get(i).getUrl());
+            ID++;
+            editor.putString(encode+ID,allPages.get(i).getCategory());
+            ID++;
+
+            editor.apply();
         }
-        //TODO: Load pages from local storage.
+
+
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        int totalPages = sPref.getInt("totalPages",-1);
+        String title, desc, url, category;
+
+        int ID = 0;
+        String encode = "Page";
+
+        if(totalPages != -1){
+            for(int i = 0; i < totalPages; i++){
+                System.out.println("onStart recreate card");
+
+                //Baaaaaaad
+                title = sPref.getString(encode+ID,"noTitle");
+                ID++;
+                desc = sPref.getString(encode+ID, null);
+                ID++;
+                url = sPref.getString(encode+ID,"noUrl");
+                ID++;
+                category = sPref.getString(encode+ID,"noCat");
+                ID++;
+
+                System.out.println("allpages size update " + allPages.size());
+                Page newPage = new Page(title,category,url,desc);
+                if(!allPages.contains(newPage)){
+                    allPages.add(newPage);
+               }
+            }
+        }
+        else{
+            //TODO: Alternative view
+        }
+
+        for (Page page : allPages) {
+            if (page.getCategory().trim().equalsIgnoreCase(this.category)) {
+                validPages.add(page);
+            }
+        }
+        cardAdapter.notifyDataSetChanged();
     }
 
 
@@ -143,6 +186,7 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
         }
     }
 
+    /*Add item dialog initiation*/
     public void addItem(){
         FragmentManager fm = getFragmentManager();
         AddItemDialogFrag df = AddItemDialogFrag.newInstance("New Page",category);
@@ -152,6 +196,7 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
         //TODO: Check validity of URL
         //TODO: Fetch picture from page
     }
+
 
     public void exitDialog(View v){
         AddItemDialogFrag runningFragment = (AddItemDialogFrag)getFragmentManager().findFragmentByTag("add_page_frag");
@@ -167,50 +212,24 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
     @Override
     public int handleUserInput(String inputTitle, String inputCategory, String inputUrl, String inputDesc) {
 
-        Page page;
+        Page page = null;
         if(inputDesc == null || inputDesc.length() == 0){
-            page = new Page(inputTitle,inputCategory,inputUrl);
-        }else{ //Possibly redundant, but for the sake of controlled environment
+            System.out.println("handle input no desc");
+            page = new Page(inputTitle,inputCategory,inputUrl,null);//TODO: Set finite description
+        }
+        else{
+            System.out.println("handle input");
             page = new Page(inputTitle,inputCategory,inputUrl,inputDesc);
         }
+
+        allPages.add(page);
         validPages.add(page);
         cardAdapter.notifyDataSetChanged();
-        Toast.makeText(this,"Page added",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Page added", Toast.LENGTH_SHORT).show();
         return 1;
     }
 
     public int getMaxDescSize(){
         return MAX_DESC_LENGTH;
-    }
-
-    /*States*/
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-
-        SharedPreferences.Editor prefsEditor;
-        Gson gson;
-        String json;
-
-        for(Page page : allPages){
-            prefsEditor = preferences.edit();
-            gson = new Gson();
-            json = gson.toJson(page);
-            prefsEditor.putString(page.getTitle(), json);
-            prefsEditor.apply();
-        }
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
-
-        for(Page page : allPages){
-            Gson gson = new Gson();
-            String json = preferences.getString(page.getTitle(), "");
-            Page p = gson.fromJson(json, Page.class);
-        }
-
-        super.onRestoreInstanceState(savedInstanceState, persistentState);
-
     }
 }

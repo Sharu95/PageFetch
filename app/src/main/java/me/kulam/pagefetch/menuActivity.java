@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,6 +44,9 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
     private RecyclerView.LayoutManager mLayoutManager;
     private static ArrayList<String> categories;
     private FloatingActionButton fButton;
+
+    private SharedPreferences categoryPref;
+    private final String CAT_PREF = "categoryPref";
 
     public void initAll(){
         setContentView(R.layout.activity_recyclerlist);
@@ -63,7 +67,7 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
                     fButton.show();
                 else if (newState == RecyclerView.SCROLL_STATE_DRAGGING)
                     fButton.hide();
-                else{
+                else {
                     fButton.show();
                 }
 
@@ -80,9 +84,9 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        categoryPref = getSharedPreferences(CAT_PREF,MODE_PRIVATE);
 
         initAll();
 
@@ -93,6 +97,40 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
 
         //TODO: Load from Local storage
         //TODO: Add a loader while scrolling
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences.Editor editor = categoryPref.edit();
+
+        editor.putInt("totalCategories", getCategories().size());
+
+        for(int i = 0; i < getCategories().size(); i++){
+            editor.putString("" + i, me.kulam.pagefetch.menuAdapter.getCategory(i));
+            editor.apply();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        int totalCategories = categoryPref.getInt("totalCategories",-1);
+        if(totalCategories == -1){
+            //TODO: Optional view
+        }
+        else{
+            for(int i = 0; i < totalCategories; i++){
+                String category = categoryPref.getString("" + i, null);
+
+                if(category != null && !me.kulam.pagefetch.menuAdapter.getList().contains(category)){
+                    categories.add(category);
+                    menuAdapter.notifyDataSetChanged();
+                }
+            }
+        }
     }
 
     @Override
@@ -144,7 +182,7 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
         else if(input.length() == 0){
             return 0;
         } else {
-            categories.add(input);
+            categories.add(StringUsage.stdFormat(input));
             Toast.makeText(this,"Category added",Toast.LENGTH_SHORT).show();
             menuAdapter.notifyDataSetChanged();
             return 1;
