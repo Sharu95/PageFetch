@@ -48,7 +48,7 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder>{
         final int removedPos = position;
         validPages.remove(removedPage);
         cardActivity.getAllpages().remove(removedPage);
-        notifyItemRemoved(position);
+        notifyItemRemoved(position);//TODO: Bug issue regarding last swipe card
 
         Snackbar undoBar = Snackbar
                 .make((((cardActivity) context).findViewById(R.id.crd_layout)), "Page was removed", Snackbar.LENGTH_LONG);
@@ -72,7 +72,6 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder>{
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //For small card
-        protected RelativeLayout relativeLayout;
         protected CardView cardView;
         protected TextView cardTitle;
         protected TextView cardDesc;
@@ -89,7 +88,6 @@ public class cardAdapter extends RecyclerView.Adapter<cardAdapter.ViewHolder>{
             cardDesc = (TextView) v.findViewById(R.id.card_desc);
             cardImg = (ImageView) v.findViewById(R.id.card_img);
             open_page = (Button) v.findViewById(R.id.card_open_page);
-            relativeLayout = (RelativeLayout) v.findViewById(R.id.card_open_page_holder);
             pageUrl = "";
 
 

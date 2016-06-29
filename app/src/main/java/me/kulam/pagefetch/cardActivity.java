@@ -116,8 +116,14 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
 
             editor.apply();
         }
+
+        System.out.println("Prior onStop - AllPages - " + allPages.size());
+        System.out.println("Prior onStop - ValidPages - " + validPages.size());
         allPages.clear();
         me.kulam.pagefetch.cardAdapter.getValidPages().clear();
+        System.out.println("After onStop - AllPages - " + allPages.size());
+        System.out.println("After onStop - ValidPages - " + validPages.size());
+        //TODO: Null out all structures to free memory if potentially onDestroy
     }
 
 
@@ -151,11 +157,16 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
             //TODO: Alternative view
         }
 
+        System.out.println("Prior onStart - AllPages - " + allPages.size());
+        System.out.println("Prior onStart - ValidPages - " + validPages.size());
+
         for (Page page : allPages) {
             if (page.getCategory().trim().equalsIgnoreCase(this.category)) {
                 validPages.add(page);
             }
         }
+        System.out.println("After onStart - AllPages - " + allPages.size());
+        System.out.println("After onStart - ValidPages - " + validPages.size());
         cardAdapter.notifyDataSetChanged();
     }
 

@@ -113,6 +113,7 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
         }
         categories.clear();
         me.kulam.pagefetch.menuAdapter.getList().clear();
+        //TODO: Null out all structures to free memory if potentially onDestroy
     }
 
     @Override
