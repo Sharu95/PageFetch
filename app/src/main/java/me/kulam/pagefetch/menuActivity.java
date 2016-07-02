@@ -1,41 +1,18 @@
 package me.kulam.pagefetch;
 
-import android.app.Activity;
-import android.app.DialogFragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.SearchManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkInfo;
-import android.net.NetworkRequest;
-import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
-
-import java.lang.reflect.Array;
+import android.support.v7.widget.Toolbar;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 public class menuActivity extends AppCompatActivity implements AddItemDialogFrag.OnFragmentInteractionListener
 {
@@ -44,12 +21,17 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
     private RecyclerView.LayoutManager mLayoutManager;
     private static ArrayList<String> categories;
     private FloatingActionButton fButton;
-
     private SharedPreferences categoryPref;
-    private final String CAT_PREF = "categoryPref";
 
-    public void initAll(){
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        categoryPref = getPreferences(MODE_PRIVATE);
         setContentView(R.layout.activity_recyclerlist);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         listView = (RecyclerView) findViewById(R.id.list_view);
 
         fButton = (FloatingActionButton) findViewById(R.id.fab_add_category);
@@ -75,27 +57,17 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
         });
 
         categories = new ArrayList<>();
-        menuAdapter = new menuAdapter(categories);
+        menuAdapter = new menuAdapter(categories, this); //TODO: For roboto
         listView.setAdapter(menuAdapter);
 
         mLayoutManager = new LinearLayoutManager(this);
         listView.setLayoutManager(mLayoutManager);
         listView.setHasFixedSize(true);
-    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        categoryPref = getSharedPreferences(CAT_PREF,MODE_PRIVATE);
 
-        initAll();
 
 
         //TODO: NETWORK
-
-        //TODO: Store data SQL or sharedpreferences
-
-        //TODO: Load from Local storage
         //TODO: Add a loader while scrolling
 
     }
@@ -109,8 +81,8 @@ public class menuActivity extends AppCompatActivity implements AddItemDialogFrag
 
         for(int i = 0; i < getCategories().size(); i++){
             editor.putString("" + i, me.kulam.pagefetch.menuAdapter.getCategory(i));
-            editor.apply();
         }
+        editor.apply();
         categories.clear();
         me.kulam.pagefetch.menuAdapter.getList().clear();
         //TODO: Null out all structures to free memory if potentially onDestroy

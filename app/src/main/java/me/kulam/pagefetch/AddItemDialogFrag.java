@@ -113,7 +113,7 @@ public class AddItemDialogFrag extends DialogFragment {
                     int checkCategoryInput = mListener.handleUserInput(categoryInput.getText().toString(), null, null, null); //Callback
                     if (checkCategoryInput == -1) {
                         Toast.makeText(getDialog().getContext(), "Category already exists", Toast.LENGTH_SHORT).show();
-                    } else if (checkCategoryInput == 0) {
+                    } else if (checkCategoryInput == 0) { //TODO: Categoryfield empty is buggy. Fix issue on empty input
                         Toast.makeText(getDialog().getContext(), "Field is empty", Toast.LENGTH_SHORT).show();
                     } else {
                         getDialog().dismiss();

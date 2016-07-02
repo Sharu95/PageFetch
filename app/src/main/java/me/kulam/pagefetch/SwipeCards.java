@@ -55,11 +55,4 @@ public class SwipeCards extends ItemTouchHelper.Callback {
                         actionState, isCurrentlyActive);
             }
     }
-
-    /*If callback is needed*/
-    public interface ItemCardSwipe {
-        void removeCard(int position);
-    }
-
-
 }

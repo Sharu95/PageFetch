@@ -23,7 +23,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -40,7 +39,6 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
     private FloatingActionButton fButton;
 
     private SharedPreferences sPref;
-    private final String PAGE_PREF = "pagePref";
 
     /*Add Floating Action Button*/
     public void addFAB(){
@@ -67,7 +65,7 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recyclerlist);
-        sPref = getSharedPreferences(PAGE_PREF,MODE_PRIVATE);
+        sPref = getPreferences(MODE_PRIVATE);
 
             listView = (RecyclerView) findViewById(R.id.list_view);
             allPages = new ArrayList<>();
@@ -113,16 +111,15 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
             ID++;
             editor.putString(encode+ID,allPages.get(i).getCategory());
             ID++;
-
-            editor.apply();
         }
+        editor.apply();
 
-        System.out.println("Prior onStop - AllPages - " + allPages.size());
-        System.out.println("Prior onStop - ValidPages - " + validPages.size());
+       // System.out.println("Prior onStop - AllPages - " + allPages.size());
+       // System.out.println("Prior onStop - ValidPages - " + validPages.size());
         allPages.clear();
         me.kulam.pagefetch.cardAdapter.getValidPages().clear();
-        System.out.println("After onStop - AllPages - " + allPages.size());
-        System.out.println("After onStop - ValidPages - " + validPages.size());
+       // System.out.println("After onStop - AllPages - " + allPages.size());
+        //System.out.println("After onStop - ValidPages - " + validPages.size());
         //TODO: Null out all structures to free memory if potentially onDestroy
     }
 
@@ -157,16 +154,16 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
             //TODO: Alternative view
         }
 
-        System.out.println("Prior onStart - AllPages - " + allPages.size());
-        System.out.println("Prior onStart - ValidPages - " + validPages.size());
+        //System.out.println("Prior onStart - AllPages - " + allPages.size());
+        //System.out.println("Prior onStart - ValidPages - " + validPages.size());
 
         for (Page page : allPages) {
             if (page.getCategory().trim().equalsIgnoreCase(this.category)) {
                 validPages.add(page);
             }
         }
-        System.out.println("After onStart - AllPages - " + allPages.size());
-        System.out.println("After onStart - ValidPages - " + validPages.size());
+        //System.out.println("After onStart - AllPages - " + allPages.size());
+        //System.out.println("After onStart - ValidPages - " + validPages.size());
         cardAdapter.notifyDataSetChanged();
     }
 
@@ -217,11 +214,11 @@ public class cardActivity extends AppCompatActivity implements AddItemDialogFrag
 
         Page page = null;
         if(inputDesc == null || inputDesc.length() == 0){
-            System.out.println("handle input no desc");
-            page = new Page(inputTitle,inputCategory,inputUrl,null);//TODO: Set finite description
+            //System.out.println("handle input no desc");
+            page = new Page(inputTitle,inputCategory,inputUrl,null);
         }
         else{
-            System.out.println("handle input");
+            //System.out.println("handle input");
             page = new Page(inputTitle,inputCategory,inputUrl,inputDesc);
         }
 

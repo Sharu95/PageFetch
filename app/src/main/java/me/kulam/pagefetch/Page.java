@@ -26,7 +26,6 @@ public class Page{
     public Page(String title, String category, String url,String description)
     {
         this.title = title;
-        this.url = "http://"+url;
         this.category = category;
 
         if(description == null){
@@ -50,6 +49,17 @@ public class Page{
         }
         else{
             this.description = description;
+        }
+
+        char[] checkUrl = new char[5];
+        url.getChars(0,4,checkUrl, 0);
+        String t = String.copyValueOf(checkUrl);
+
+        if(t.startsWith("http") || t.startsWith("https")){
+            this.url = url;
+        }//Check if url is saved before or new page
+        else{
+            this.url = "http://"+url;
         }
 
         //TODO: Set image resource when creating page.

@@ -5,11 +5,14 @@ import android.bluetooth.le.AdvertiseData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,20 +46,43 @@ public class menuAdapter extends RecyclerView.Adapter<menuAdapter.MenuViewHolder
                 public void onClick(View v) {
 
                     int cName = R.id.list_item;
-                    if(cName == categoryName.getId())
-                    {
+                    if (cName == categoryName.getId()) {
                         Intent intent = new Intent(v.getContext(), cardActivity.class);
-                        intent.putExtra("category",categoryName.getText().toString());
+                        intent.putExtra("category", categoryName.getText().toString());
                         v.getContext().startActivity(intent);
                     }
                 }
             });
-        }
-    }
+            Typeface typeface = Typeface.createFromAsset(context.getAssets(), "font/Roboto-Light.ttf"); //TODO: Light preferred
+            categoryName.setTypeface(typeface);//TODO: For Roboto
 
+            //TODO: Animation for categories
+            final Animation anim = AnimationUtils.loadAnimation(context,R.anim.slide_in);
+            anim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                    anim.setStartOffset(400);
+                }
+            });
+            categoryName.setAnimation(anim);
+        }
+
+
+
+    }
+    protected static Context context;
     // Provide a suitable constructor (depends on the kind of dataset)
-    public menuAdapter(ArrayList<String> categories){
+    public menuAdapter(ArrayList<String> categories, Context activity){
         this.categories = categories;
+        context = activity; //TODO: For roboto
     }
 
     // Create new views (invoked by the layout manager)

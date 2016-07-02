@@ -1,17 +1,11 @@
 package me.kulam.pagefetch;
 
-import android.app.ActionBar;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
@@ -31,15 +25,17 @@ public class WebActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_activity);
 
-        //TODO: Set toolbar
-        //Toolbar myToolbar = (Toolbar) findViewById(R.layout.web_toolbar);
-        //setSupportActionBar(myToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
 
         Bundle getExtras = getIntent().getExtras();
         String url = getExtras.getString("url");
         String title = getExtras.getString("title");
+        getSupportActionBar().setTitle(title.toUpperCase());
 
+        //TODO: Toolbar settings, icons, modifications
+        //TODO: Hide toolbar on scroll
 
         /*See https://android-arsenal.com/details/1/3066*/
         mDialog = new SimpleArcDialog(this);
@@ -47,10 +43,7 @@ public class WebActivity extends AppCompatActivity {
         ArcConfiguration ac = new ArcConfiguration(this);
         mDialog.setConfiguration(ac);
         mDialog.show();
-
-
-        //TODO: Actionbar set.
-
+        
         webView = (WebView) findViewById(R.id.web_view);
         webView.getSettings().setJavaScriptEnabled(true);
 
