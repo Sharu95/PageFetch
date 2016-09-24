@@ -51,6 +51,7 @@ public class Page{
             this.description = description;
         }
 
+
         char[] checkUrl = new char[5];
         url.getChars(0,4,checkUrl, 0);
         String t = String.copyValueOf(checkUrl);

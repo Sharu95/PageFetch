@@ -28,10 +28,11 @@ import java.util.Set;
 public class menuAdapter extends RecyclerView.Adapter<menuAdapter.MenuViewHolder>
 {
     private static ArrayList<String> categories;
-
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
+    private int lastPos = -1;
+
     public static class MenuViewHolder extends RecyclerView.ViewHolder
     {
         protected TextView categoryName;
@@ -56,27 +57,7 @@ public class menuAdapter extends RecyclerView.Adapter<menuAdapter.MenuViewHolder
             Typeface typeface = Typeface.createFromAsset(context.getAssets(), "font/Roboto-Light.ttf"); //TODO: Light preferred
             categoryName.setTypeface(typeface);//TODO: For Roboto
 
-            //TODO: Animation for categories
-            final Animation anim = AnimationUtils.loadAnimation(context,R.anim.slide_in);
-            anim.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                    anim.setStartOffset(400);
-                }
-            });
-            categoryName.setAnimation(anim);
         }
-
-
-
     }
     protected static Context context;
     // Provide a suitable constructor (depends on the kind of dataset)
@@ -102,6 +83,13 @@ public class menuAdapter extends RecyclerView.Adapter<menuAdapter.MenuViewHolder
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.categoryName.setText(StringUsage.stdFormat(categories.get(position)));
+
+        //TODO: Sequental animation for each time items are loaded after onStop. Now it is all at the same time
+        final Animation anim = AnimationUtils.loadAnimation(context, R.anim.slide_up);
+        if(position > lastPos){
+            holder.categoryName.startAnimation(anim);
+            lastPos = position;
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
